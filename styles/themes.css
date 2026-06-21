@@ -1,0 +1,82 @@
+/* ─────────────────────────────────────────────────────────── *
+ * AI Engineering Academy — Themes
+ * ─────────────────────────────────────────────────────────── */
+
+/* ── Persona color tokens ───────────────────────────────── */
+/* Light mode */
+body[data-persona="earthling"] {
+  --persona-color: #16a34a;
+  --persona-alpha: rgba(22,163,74,.10);
+}
+body[data-persona="cadet"] {
+  --persona-color: #2563eb;
+  --persona-alpha: rgba(37,99,235,.10);
+}
+body[data-persona="commander"] {
+  --persona-color: #7c3aed;
+  --persona-alpha: rgba(124,58,237,.10);
+}
+body[data-persona="engineer"] {
+  --persona-color: #ea580c;
+  --persona-alpha: rgba(234,88,12,.10);
+}
+body[data-persona="embedded"] {
+  --persona-color: #0d9488;
+  --persona-alpha: rgba(13,148,136,.10);
+}
+
+/* Dark mode — slightly brighter for contrast on dark bg */
+body.dark[data-persona="earthling"] {
+  --persona-color: #4ade80;
+  --persona-alpha: rgba(74,222,128,.10);
+}
+body.dark[data-persona="cadet"] {
+  --persona-color: #60a5fa;
+  --persona-alpha: rgba(96,165,250,.10);
+}
+body.dark[data-persona="commander"] {
+  --persona-color: #a78bfa;
+  --persona-alpha: rgba(167,139,250,.10);
+}
+body.dark[data-persona="engineer"] {
+  --persona-color: #fb923c;
+  --persona-alpha: rgba(251,146,60,.10);
+}
+body.dark[data-persona="embedded"] {
+  --persona-color: #2dd4bf;
+  --persona-alpha: rgba(45,212,191,.10);
+}
+
+/* ── Persona card accent colors (--pc on the card element) ── */
+.persona-card[data-id="earthling"]  { --pc: #4ade80; }
+.persona-card[data-id="cadet"]      { --pc: #60a5fa; }
+.persona-card[data-id="commander"]  { --pc: #a78bfa; }
+.persona-card[data-id="engineer"]   { --pc: #fb923c; }
+.persona-card[data-id="embedded"]   { --pc: #2dd4bf; }
+
+/* ── Light mode specifics ────────────────────────────────── */
+body.light .code-block,
+body:not(.dark) .code-block {
+  background: #1a1f36;
+  border-color: rgba(0,0,0,.2);
+}
+
+/* ── Smooth transitions on theme switch ─────────────────── */
+body,
+body .app-header,
+body .sidebar,
+body .modal,
+body .persona-menu,
+body .concept-card,
+body .definition-box,
+body .why-matters-box,
+body .analogy-box,
+body .mistake-box,
+body .example-box,
+body .quiz-container,
+body .interactive-demo {
+  transition:
+    background-color .3s ease,
+    border-color .3s ease,
+    color .3s ease;
+}
