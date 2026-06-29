@@ -1,15 +1,17 @@
 {
-  "version": 2,
-  "framework": null,
+  "buildCommand": "",
   "outputDirectory": ".",
-  "buildCommand": null,
-  "routes": [
+  "installCommand": "",
+  "framework": null,
+  "headers": [
     {
-      "src": "/(.*)",
-      "headers": {
-        "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400"
-      },
-      "dest": "/$1"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=86400"
+        }
+      ]
     }
   ]
 }
