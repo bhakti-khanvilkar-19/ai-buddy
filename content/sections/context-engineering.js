@@ -1,0 +1,158 @@
+SECTION_CONTENT['context-engineering'] = { default: `
+# Context Engineering
+
+## What is Context?
+
+The **context window** is everything the LLM can "see" at the moment it generates a response. It includes:
+
+- The system prompt (instructions)
+- Conversation history
+- Tool call results
+- Retrieved documents (RAG)
+- Any data you've injected
+
+**Context engineering** is the discipline of deciding *what goes into that window* — and what doesn't.
+
+> "Context engineering is the new prompt engineering. Prompts are sentences. Context is everything the model knows right now." — Andrej Karpathy
+
+---
+
+## Why Context Engineering Matters
+
+LLMs don't have persistent memory. Every call starts fresh. The quality of the model's output is almost entirely determined by the quality of what's in its context.
+
+Bad context → bad outputs, even with a perfect model.
+Good context → good outputs, even with a smaller model.
+
+---
+
+## Context Windows (2025)
+
+| Model | Context window |
+|---|---|
+| GPT-4o | 128K tokens |
+| Claude Sonnet 4.x | 200K tokens |
+| Claude Opus 4.x | 200K tokens |
+| Gemini 1.5 Pro | 1M tokens |
+| Gemini 2.0 Flash | 1M tokens |
+
+**200K tokens ≈ a 150,000-word book** — but more context doesn't always mean better results. LLMs can get "lost in the middle" — they attend better to content at the beginning and end of the context.
+
+---
+
+## Context Management
+
+### The context budget
+
+Every token in the context costs money and latency. Treat the context window as a **budget** — spend it on what actually improves the answer.
+
+\`\`\`
+200K token budget (Claude):
+├── System prompt + instructions: ~2K
+├── Conversation history (last 10 turns): ~10K
+├── Retrieved documents (RAG): ~40K
+├── Tool results (current task): ~20K
+└── Available for response generation: ~128K
+\`\`\`
+
+### Context compression
+
+When context gets too long, compress it:
+
+- **Summarize old turns:** Replace full conversation history with a summary
+- **Prune irrelevant tools:** Remove tool results that aren't relevant to current step
+- **Chunk retrieved docs:** Only pull the relevant paragraphs, not full documents
+- **Rolling window:** Keep only the last N turns of conversation
+
+---
+
+## Grounding
+
+**Grounding** means giving the model accurate, current, factual information so it doesn't hallucinate.
+
+| Grounding method | How | When to use |
+|---|---|---|
+| **RAG** | Retrieve relevant docs at query time | Large knowledge bases |
+| **Context stuffing** | Paste docs directly into prompt | Small, focused reference material |
+| **Tool calling** | Model fetches data via tool call | Real-time or frequently updated data |
+| **Fine-tuning** | Bake facts into model weights | Static, high-frequency facts |
+
+### Example: Grounding with RAG
+
+\`\`\`python
+# User asks: "What's our refund policy?"
+# Without grounding: model hallucinates a policy
+# With grounding:
+docs = vector_db.search("refund policy", top_k=3)
+context = f"""
+Answer based ONLY on the following company documents:
+
+{format_docs(docs)}
+
+Question: {user_question}
+If the answer isn't in the documents, say "I don't have that information."
+"""
+\`\`\`
+
+---
+
+## Memory Types
+
+| Type | Lives where | Persists | Use for |
+|---|---|---|---|
+| **Working** | Context window | This call only | Current task state |
+| **Episodic** | External DB | Days/months | Past conversation summaries |
+| **Semantic** | Vector DB | Permanent | User preferences, facts |
+| **Procedural** | System prompt / skills | Permanent | How the agent behaves |
+
+---
+
+## Retrieval
+
+Retrieval is how agents pull information from external storage into the context window just-in-time.
+
+### Retrieval pipeline
+
+\`\`\`
+User query
+    ↓
+Embed query → [0.23, -0.51, 0.88, ...]
+    ↓
+Vector search in knowledge base
+    ↓
+Top-K most similar chunks returned
+    ↓
+Re-rank for relevance
+    ↓
+Inject top chunks into context
+    ↓
+LLM generates grounded answer
+\`\`\`
+
+---
+
+## Knowledge Injection Patterns
+
+### Pattern 1: Direct injection (simple)
+\`\`\`
+System: You are a customer support agent for Acme Corp.
+
+Company policies:
+- Refunds: within 30 days with receipt
+- Shipping: 3-5 business days standard
+- Support hours: 9am-6pm EST Mon-Fri
+\`\`\`
+
+### Pattern 2: Dynamic injection (RAG)
+Pull relevant chunks at runtime based on what the user is asking.
+
+### Pattern 3: Hierarchical injection
+Inject a summary first; if the model needs details, it calls a tool to fetch them.
+
+\`\`\`
+Context contains: "Acme refund policy summary (ask refund_details tool for specifics)"
+If model calls refund_details() → inject full policy text
+\`\`\`
+
+This keeps the context lean while allowing depth on demand.
+` };
