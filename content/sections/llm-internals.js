@@ -114,26 +114,18 @@ Different heads learn different types of relationships. This is why transformers
 
 ## Transformer Architecture
 
-\`\`\`
-Input tokens
-    ↓
-Token Embeddings + Positional Encoding
-    ↓
-[Transformer Block] × N (e.g., 96 layers in GPT-4)
-    ├── Layer Norm
-    ├── Multi-Head Self-Attention
-    ├── Residual connection
-    ├── Layer Norm
-    └── Feed-Forward Network (FFN)
-        ├── Linear (d_model → 4×d_model)
-        ├── GELU activation
-        └── Linear (4×d_model → d_model)
-    ↓
-Final Layer Norm
-    ↓
-Linear → Logits (vocabulary size: ~50K)
-    ↓
-Softmax → Probability distribution over next token
+\`\`\`mermaid
+flowchart TD
+    T[Input tokens] --> EMB[Token embeddings<br/>+ positional encoding]
+    EMB --> ATT
+    subgraph BLK["One transformer block — repeated N times (96 layers in GPT-4)"]
+        ATT[Layer norm → Multi-head self-attention] --> R1["+ residual connection"]
+        R1 --> FFN[Layer norm → Feed-forward network<br/>d_model → 4×d_model → d_model]
+        FFN --> R2["+ residual connection"]
+    end
+    R2 --> FLN[Final layer norm]
+    FLN --> LG["Logits — one score per vocab token (~50K)"]
+    LG --> SM([Softmax → next-token probabilities])
 \`\`\`
 
 ---

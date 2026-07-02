@@ -9,14 +9,15 @@ Without RAG: the model answers from its training data (which has a knowledge cut
 
 With RAG: the model answers from your up-to-date, private, authoritative documents.
 
-\`\`\`
-User question
-    ↓
-Embed question → search vector DB → retrieve top 3 matching documents
-    ↓
-Inject documents into prompt: "Answer based on: [doc1] [doc2] [doc3]"
-    ↓
-LLM generates grounded answer
+\`\`\`mermaid
+flowchart LR
+    Q[User question] --> E[Embed the question]
+    E --> S[(Vector DB<br/>semantic search)]
+    S --> K[Top-K relevant chunks]
+    K --> RR[Re-rank by relevance]
+    RR --> P[Inject into prompt]
+    P --> L[LLM]
+    L --> A([Grounded answer<br/>with citations])
 \`\`\`
 
 ---

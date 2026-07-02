@@ -20,6 +20,7 @@ export default [
         URLSearchParams: 'readonly',
         // CDN libraries
         mermaid: 'readonly',
+        marked: 'readonly',
         // Cross-file app globals (defined in one script, used in another)
         SECTIONS: 'readonly',
         SECTION_CONTENT: 'readonly',

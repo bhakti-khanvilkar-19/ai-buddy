@@ -45,21 +45,14 @@ Use a **workflow** when you know every step in advance. Use an **agent** when th
 
 This is the heartbeat of every AI agent. It repeats until the goal is complete:
 
-\`\`\`
-┌─────────────────────────────────────────┐
-│              AGENT LOOP                 │
-│                                         │
-│  1. OBSERVE  ← read environment/input   │
-│       ↓                                 │
-│  2. THINK    ← reason about what to do  │
-│       ↓                                 │
-│  3. PLAN     ← pick next action         │
-│       ↓                                 │
-│  4. ACT      ← call a tool or respond   │
-│       ↓                                 │
-│  5. REFLECT  ← was it right? what next? │
-│       ↓                                 │
-│  Loop back to OBSERVE ──────────────────┘
+\`\`\`mermaid
+flowchart TD
+    A["1 · OBSERVE<br/>read environment & current state"] --> B["2 · THINK<br/>reason about the situation"]
+    B --> C["3 · PLAN<br/>pick the next action"]
+    C --> D["4 · ACT<br/>call a tool or respond"]
+    D --> E["5 · REFLECT<br/>did it work? what next?"]
+    E -->|goal not complete| A
+    E -->|goal complete| F([Return result])
 \`\`\`
 
 Each iteration of this loop is called a **step** or **turn**. A task might take 3 steps or 30 — the agent decides.
