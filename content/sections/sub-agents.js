@@ -46,6 +46,19 @@ A multi-agent system (MAS) is a collection of agents that collaborate to complet
 
 A central orchestrator plans the work and delegates to worker sub-agents. Workers report back; orchestrator synthesizes.
 
+\`\`\`mermaid
+flowchart TD
+    U[User goal] --> O[Orchestrator agent<br/>plans & delegates]
+    O --> W1[Worker A<br/>research]
+    O --> W2[Worker B<br/>analysis]
+    O --> W3[Worker C<br/>writing]
+    W1 --> R[Results collected]
+    W2 --> R
+    W3 --> R
+    R --> O2[Orchestrator synthesizes]
+    O2 --> F([Final deliverable])
+\`\`\`
+
 \`\`\`
 Orchestrator: "I need to audit 50 repos for security issues"
   → Spawns 50 worker agents in parallel (one per repo)

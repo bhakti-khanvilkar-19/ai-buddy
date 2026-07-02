@@ -13,6 +13,19 @@ The **context window** is everything the LLM can "see" at the moment it generate
 
 **Context engineering** is the discipline of deciding *what goes into that window* — and what doesn't.
 
+\`\`\`mermaid
+flowchart TD
+    subgraph CW["Context window — everything the model sees"]
+        SP[System prompt & instructions]
+        KG[Retrieved knowledge · RAG]
+        H[Conversation history]
+        TR[Tool results]
+        UM[Current user message]
+    end
+    CW --> LLM[LLM forward pass]
+    LLM --> OUT([Response])
+\`\`\`
+
 > "Context engineering is the new prompt engineering. Prompts are sentences. Context is everything the model knows right now." — Andrej Karpathy
 
 ---

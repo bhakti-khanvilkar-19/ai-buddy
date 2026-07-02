@@ -3,43 +3,18 @@ SECTION_CONTENT['prod-stack'] = { default: `
 
 ## End-to-End Architecture
 
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                     USER INTERFACE                          │
-│  Web / Mobile / API client / Slack / CLI                    │
-└──────────────────────┬──────────────────────────────────────┘
-                       ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    API GATEWAY                              │
-│  Auth · Rate limiting · Request logging · Cost tracking     │
-└──────────────────────┬──────────────────────────────────────┘
-                       ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    AGENT LAYER                              │
-│  Orchestrator · Skills · Tool calling · Memory management   │
-└───────┬──────────────┬──────────────────────┬──────────────┘
-        ↓              ↓                      ↓
-┌───────────┐  ┌───────────────┐  ┌─────────────────────────┐
-│ RAG LAYER │  │  TOOL LAYER   │  │      LLM LAYER          │
-│ Retrieval │  │ APIs, DB, FS  │  │  Claude / GPT / Gemini  │
-│ Re-rank   │  │ Code exec     │  │  Local models (Ollama)  │
-└─────┬─────┘  └───────────────┘  └─────────────────────────┘
-      ↓
-┌─────────────────────┐
-│  VECTOR DATABASE    │
-│  Pinecone / Qdrant  │
-│  pgvector / Weaviate│
-└─────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│               MEMORY LAYER (cross-cutting)                  │
-│  Redis (short-term) · PostgreSQL (long-term) · Vector DB    │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│            OBSERVABILITY (cross-cutting)                    │
-│  Langfuse · OpenTelemetry · Grafana · Alerts                │
-└─────────────────────────────────────────────────────────────┘
+\`\`\`mermaid
+flowchart TD
+    UI[User interface<br/>Web · Mobile · Slack · CLI] --> GW[API gateway<br/>auth · rate limiting · logging · cost tracking]
+    GW --> AG[Agent layer<br/>orchestrator · skills · tool calling · memory mgmt]
+    AG --> RAGL[RAG layer<br/>retrieval · re-ranking]
+    AG --> TL[Tool layer<br/>APIs · DB · filesystem · code exec]
+    AG --> LLM[LLM layer<br/>Claude · GPT · Gemini · local models]
+    RAGL --> VDB[(Vector database<br/>Pinecone · Qdrant · pgvector)]
+    AG -.-> MEM[(Memory layer<br/>Redis short-term · Postgres long-term)]
+    GW -.-> OBS[Observability<br/>Langfuse · OpenTelemetry · alerts]
+    AG -.-> OBS
+    LLM -.-> OBS
 \`\`\`
 
 ---

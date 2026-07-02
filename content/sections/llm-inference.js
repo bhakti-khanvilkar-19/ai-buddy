@@ -17,6 +17,22 @@ When you send a message to an LLM API, here's what happens:
 7. Stream tokens back (or return all at once)
 \`\`\`
 
+\`\`\`mermaid
+sequenceDiagram
+    participant C as Client
+    participant G as API Gateway
+    participant M as Model Server
+    C->>G: POST /messages (prompt)
+    G->>M: Tokenize input
+    M->>M: Prefill — process all input tokens in parallel
+    M->>M: Store KV cache
+    loop Decode — one token per forward pass
+        M->>M: logits → sample next token
+        M-->>C: stream token
+    end
+    M-->>C: stop reason + token usage
+\`\`\`
+
 The **prefill** phase is fast (parallel processing of all input tokens).
 The **decode** phase is slow (one token per forward pass, auto-regressive).
 

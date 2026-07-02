@@ -136,22 +136,16 @@ def process_item(item):
 
 Combining traditional workflow reliability with LLM intelligence:
 
-\`\`\`
-Support ticket arrives (trigger)
-    ↓
-LLM: Classify priority and category (AI step)
-    ↓
-[if critical] → page on-call immediately
-[if billing] → route to billing queue
-[if bug] →
-    LLM: Extract reproduction steps + affected version (AI step)
-    ↓
-    Search existing issues (tool call)
-    ↓
-    LLM: Is this a known issue? (AI step)
-    ↓
-    [if yes] → link to existing ticket, close
-    [if no] → create new Jira issue, assign to team
+\`\`\`mermaid
+flowchart TD
+    T([Support ticket arrives — trigger]) --> C{LLM classifies<br/>priority & category}
+    C -->|critical| P[Page on-call immediately]
+    C -->|billing| B[Route to billing queue]
+    C -->|bug| X[LLM extracts repro steps<br/>+ affected version]
+    X --> S[Search existing issues — tool call]
+    S --> K{LLM: known issue?}
+    K -->|yes| L[Link to existing ticket · close]
+    K -->|no| J[Create Jira issue · assign to team]
 \`\`\`
 
 This hybrid pattern is extremely powerful — deterministic flow for reliability, LLM for the parts that require judgment.

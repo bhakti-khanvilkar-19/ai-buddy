@@ -13,6 +13,17 @@ Building an agent is easier than it sounds. You need five things:
 
 Then test, evaluate, and iterate.
 
+\`\`\`mermaid
+flowchart LR
+    G[1 · Define goal] --> M[2 · Select model]
+    M --> I[3 · Write instructions]
+    I --> T[4 · Add tools]
+    T --> ME[5 · Add memory]
+    ME --> EV[6 · Evaluate]
+    EV --> OB[7 · Observe in production]
+    OB -->|iterate| I
+\`\`\`
+
 ---
 
 ## Step 1: Define the Goal

@@ -12,12 +12,14 @@ After MCP:   One MCP server → works with any MCP-compatible AI client
 
 ### MCP Architecture
 
-\`\`\`
-Host (Claude Code, Cursor, etc.)
-    ↓ MCP protocol (JSON-RPC over stdio or HTTP)
-MCP Server (your code)
-    ↓ native calls
-Resources: files, databases, APIs, services
+\`\`\`mermaid
+flowchart LR
+    H[Host app<br/>Claude Code · Cursor · Claude.ai] <-->|"MCP protocol<br/>(JSON-RPC over stdio/HTTP)"| S1[MCP server: GitHub]
+    H <-->|MCP| S2[MCP server: Postgres]
+    H <-->|MCP| S3[MCP server: Filesystem]
+    S1 --> G[(GitHub API)]
+    S2 --> D[(Database)]
+    S3 --> F[(Local files)]
 \`\`\`
 
 ### Writing an MCP Server (Python)

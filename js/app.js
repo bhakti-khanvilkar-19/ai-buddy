@@ -127,8 +127,20 @@ function loadSection(id) {
 
   updatePersonaBanner();
 
+  /* convert markdown mermaid code fences into renderable mermaid divs */
+  container.querySelectorAll('pre code.language-mermaid').forEach(code => {
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = code.textContent;
+    code.closest('pre').replaceWith(div);
+  });
+
   /* re-init mermaid on new content */
-  mermaid.init(undefined, '#content-container .mermaid');
+  try {
+    mermaid.init(undefined, '#content-container .mermaid');
+  } catch (e) {
+    console.error('Mermaid render failed:', e);
+  }
 
   /* track visited section */
   if (currentPersona) {
