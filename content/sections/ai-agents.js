@@ -116,4 +116,70 @@ This reflection step is what separates capable agents from fragile ones.
 - **Code agent (Claude Code):** Given a bug report, reads the repo, finds the bug, writes a fix, runs tests, creates a PR
 - **Customer support agent:** Reads a ticket, queries CRM, checks order status, drafts a reply, escalates if needed
 - **DevOps agent:** Monitors alerts, reads logs, identifies root cause, opens a Jira ticket, pages on-call
+`,
+earthling: `
+# AI Agents
+
+## The Difference in One Story
+
+Imagine you need a birthday party planned.
+
+**A chatbot** is like calling a knowledgeable friend: "What's a good cake flavor?" — "Chocolate is always safe!" Helpful, but *you're* still doing all the work, one question at a time.
+
+**An agent** is like hiring a party planner: "Plan my daughter's 8th birthday, around $300, she loves dinosaurs." The planner figures out the steps themselves — finds a venue, orders the dino cake, sends invitations, handles the thing where the balloon shop is closed and finds another one — and comes back with a finished party.
+
+That's the whole idea: **a chatbot answers you; an agent works for you.**
+
+---
+
+## How Does an Agent Actually Work?
+
+Agents run on a simple repeating cycle — the same one you use when cooking a new recipe:
+
+1. **Look** at where things stand (What's in the fridge?)
+2. **Think** about what to do next (I need to buy cream.)
+3. **Do it** (Go to the store.)
+4. **Check the result** (Store's out of cream — plan B: use milk and butter.)
+5. **Repeat** until dinner is served.
+
+The AI does exactly this: look, think, act, check, repeat — dozens of times if needed — until the job is done. The "check the result and adjust" step is what makes it feel intelligent rather than robotic.
+
+---
+
+## What Do Agents Use to "Do" Things?
+
+A chatbot can only produce words. Agents get **tools** — abilities plugged into them, like apps on a phone:
+
+- Search the web
+- Read and write documents
+- Send emails
+- Check calendars
+- Book things, buy things, look things up in company systems
+
+The agent decides *when* to use each tool, the way you decide when to grab your calculator versus your calendar.
+
+---
+
+## Where You'll Meet Agents in Real Life
+
+- **Customer service:** You email about a double-charge; an agent checks your account, sees the duplicate, refunds it, and replies — no human involved, resolved in minutes.
+- **Research:** "Compare the best family SUVs under $40k" — an agent reads dozens of reviews and gives you a comparison table.
+- **For workers:** Agents that draft reports, sort inboxes, prepare meeting summaries.
+
+---
+
+## Why People Are Careful with Agents
+
+Giving AI the ability to *act* (not just talk) raises the stakes:
+
+- A chatbot that's wrong wastes your time. An agent that's wrong might **send** the wrong email or **buy** the wrong ticket.
+- Small early mistakes snowball — like a party planner who wrote down the wrong date and built everything around it.
+
+That's why well-designed agents pause and ask a human before doing anything big or irreversible — "About to spend $300, confirm?" Think of it as the agent showing you the receipt *before* swiping the card.
+
+---
+
+## The One-Sentence Takeaway
+
+An agent is AI you can hand a *goal* instead of a question — it plans the steps, uses its tools, fixes its own missteps, and (if it's built right) checks with you before doing anything you can't undo.
 ` };

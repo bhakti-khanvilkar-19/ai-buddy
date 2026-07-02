@@ -54,4 +54,55 @@ The term was coined by Andrej Karpathy in 2025. It describes a paradigm shift: i
 5. **Iterate in small steps:** Don't ask for a whole application at once — build one feature at a time
 6. **Security audit:** Specifically ask the AI to review its own code for security issues
 7. **Commit often:** Small commits make it easy to roll back when AI code breaks something
+`,
+earthling: `
+# Vibe Coding
+
+## What On Earth is "Vibe Coding"?
+
+It's the new name for building software by *describing the vibe* of what you want, and letting AI handle the technical part.
+
+You: "I want a cheerful little website where my book club can vote on next month's book."
+
+AI: *builds it.*
+
+You: "Ooh, can the winning book get a little crown on it?"
+
+AI: *adds the crown.*
+
+No programming knowledge involved. You're the director; the AI is the film crew. The term was coined by a famous AI researcher (Andrej Karpathy) in 2025, and it stuck because it captures the feeling — you're going by vibes, not blueprints.
+
+---
+
+## Why It's Exciting
+
+- **Ideas stop dying in notebooks.** That app idea you've had for years? You can now try it this weekend.
+- **It's fast.** Prototypes in an afternoon that used to take a professional team weeks.
+- **It's for everyone.** Teachers building classroom tools, shop owners building inventory trackers, hobbyists building game aids.
+
+---
+
+## Why It's Also a Bit Dangerous
+
+Here's the honest part. When AI builds something for you, it's like moving into a house you didn't build and can't inspect:
+
+- **Hidden flaws.** The AI occasionally writes code that *looks* right but has subtle problems — like a beautiful staircase with one slightly-off step.
+- **Security gaps.** The house might have a back door you don't know exists. If your creation handles passwords, payments, or private info, this really matters.
+- **You can't fix what you don't understand.** When it breaks (things always break), you're dependent on the AI to fix it.
+
+---
+
+## Sensible Rules for Vibe Coders
+
+1. **Test it like a skeptic.** Click everything. Type nonsense in the forms. Try to break it — better you than a stranger.
+2. **Go step by step.** Ask for one feature at a time, not the whole dream at once. Small steps are easier to check.
+3. **Keep private data out** of hobby projects. Book club votes? Fine. Friends' credit cards? Absolutely not.
+4. **Save your progress** before big changes, so a bad change can be undone.
+5. **Know when to call a pro.** The moment real money or other people's personal information is involved, get a professional review. Vibe-built is fine for the garden shed — not for the bridge.
+
+---
+
+## The One-Sentence Takeaway
+
+Vibe coding lets anyone turn ideas into working software by chatting — thrilling and genuinely useful, as long as you test what you build and keep anything sensitive in professional hands.
 ` };

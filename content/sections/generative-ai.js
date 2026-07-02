@@ -118,4 +118,62 @@ Modern models work across multiple modalities — they can see, hear, and genera
 - **Cost:** Large models are expensive to run
 
 The field is developing rapidly — most of these limitations are being actively addressed.
+`,
+earthling: `
+# Generative AI
+
+## What is Generative AI?
+
+You've seen AI that *recognizes* things — your phone unlocking when it sees your face, or your email sorting out spam. Generative AI is different: it *creates* things.
+
+Think of it like this:
+
+- **Old AI** is like a bouncer at a club: it looks at things and makes a judgment. "You're on the list. You're not."
+- **Generative AI** is like a talented chef: you describe what you're craving, and it makes something new from scratch.
+
+Ask it for a poem about your dog, a birthday card message, a vacation plan, or a summary of a long document — and it creates one, right there, that never existed before.
+
+---
+
+## How Does It "Create"?
+
+Here's the kitchen analogy again. A chef doesn't invent cooking from nothing — they've tasted thousands of dishes, learned patterns (what flavors go together, what textures work), and use that experience to create new dishes.
+
+Generative AI learned from an enormous amount of human writing, art, and conversation. It absorbed the *patterns* of how we express things. When you ask it for something, it uses those patterns to produce something new — not copied, but composed, the way a chef composes a new dish from familiar ingredients.
+
+---
+
+## What Can It Make?
+
+**Writing** — This is the big one. Emails, summaries, stories, explanations, translations. Tools like Claude and ChatGPT are essentially master writers you can talk to.
+
+**Images** — Describe a picture in words ("a cozy cabin in the snow at sunset, painted like a watercolor") and tools like Midjourney or DALL-E paint it in seconds.
+
+**Voices and music** — AI can now read text aloud in a natural voice, clone voices (with permission!), and even compose original songs from a description.
+
+**Video** — The newest frontier. Type a description, get a short movie clip. Still early, but improving fast.
+
+---
+
+## The "Multimodal" Thing
+
+You might hear the word *multimodal*. It just means one AI that can handle several formats at once — it can look at a photo AND talk about it, or listen to you AND write back.
+
+Real example: snap a photo of a rash on your arm and ask "should I be worried about this?" — the AI can see the image and respond in words. (It'll rightly tell you to see a doctor, but it can tell you what it looks like.)
+
+---
+
+## What to Watch Out For
+
+**It makes things up sometimes.** Confidently. This is called "hallucination." The AI is a pattern-maker, not a fact-checker — think of it as a brilliant friend who occasionally bluffs. Double-check anything important.
+
+**It reflects what it learned.** If the writing it learned from had biases, some of that seeps through.
+
+**Fakes are getting good.** AI can imitate voices and faces well enough to fool people. If "your relative" calls asking for money urgently, verify through another channel. Seriously — this scam exists today.
+
+---
+
+## The One-Sentence Takeaway
+
+Generative AI is a creation machine: you describe what you want in plain language, and it makes a brand-new version of it — usually impressive, occasionally wrong, and always worth double-checking for anything that matters.
 ` };
