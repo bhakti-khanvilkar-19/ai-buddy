@@ -1,0 +1,25 @@
+{
+  "name": "ai-buddy",
+  "version": "1.0.0",
+  "description": "A personalized AI engineering learning platform",
+  "type": "module",
+  "scripts": {
+    "check:content": "node scripts/check-content.js",
+    "lint": "eslint js/**/*.js content/**/*.js",
+    "lint:fix": "eslint --fix js/**/*.js content/**/*.js",
+    "format": "prettier --write js/**/*.js content/**/*.js styles/**/*.css *.html",
+    "format:check": "prettier --check js/**/*.js content/**/*.js styles/**/*.css *.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:41729/git/bhakti-khanvilkar-19/ai-buddy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.3"
+  }
+}

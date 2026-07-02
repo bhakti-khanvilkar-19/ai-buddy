@@ -149,13 +149,15 @@ function loadSection(id) {
 
 /* ── Content resolver ───────────────────────────────────── */
 function resolveContent(sectionId, persona) {
-  /* SECTION_CONTENT is provided by content/legacy.js for now.
-     When persona-specific files are added they override here. */
   if (typeof SECTION_CONTENT !== 'undefined') {
     const section = SECTION_CONTENT[sectionId];
     if (section) {
-      /* persona-specific variant first, then default */
-      return section[persona] || section['default'] || section;
+      const raw = section[persona] || section['default'] || section;
+      /* Parse markdown strings; leave existing HTML blobs untouched */
+      if (typeof raw === 'string' && !raw.trimStart().startsWith('<') && typeof marked !== 'undefined') {
+        return marked.parse(raw);
+      }
+      return raw;
     }
   }
   return buildPlaceholder(sectionId, persona);
