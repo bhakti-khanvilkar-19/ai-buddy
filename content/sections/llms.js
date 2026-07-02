@@ -156,4 +156,52 @@ Modern variants: RLAIF (AI feedback instead of human), DPO (Direct Preference Op
 - **Speculative decoding:** Small model drafts, large model verifies (2-3x faster)
 - **KV caching:** Cache attention keys/values across requests
 - **Batching:** Process multiple requests together
+`,
+earthling: `
+# Large Language Models
+
+## What is an LLM?
+
+LLM stands for Large Language Model — it's the engine inside tools like Claude and ChatGPT.
+
+Here's the surprising truth about how it works: an LLM is, at heart, an extremely sophisticated **auto-complete**. You know how your phone suggests the next word when you're texting? An LLM does that — but it's read a library's worth of text millions of times over, so its "next word guesses" are so good they add up to essays, answers, and conversations.
+
+> **The parrot vs. the professor:** A parrot repeats phrases it has heard. An LLM is more like a professor who has read everything — it doesn't repeat, it *recombines* everything it learned into new answers tailored to your question.
+
+---
+
+## Tokens — The AI's Bite Sizes
+
+AI doesn't read whole words or whole sentences. It chews text in small chunks called **tokens** — roughly three-quarters of a word each.
+
+Why should you care? Two reasons:
+
+1. **Pricing.** AI services charge by the token — like a taxi meter that ticks per chunk of text. Longer conversations cost more.
+2. **Counting quirks.** Ever notice AI is oddly bad at counting letters in a word? It's because it doesn't see letters — it sees tokens. Asking it how many R's are in "strawberry" is like asking someone to count the grains of rice in a bite they already swallowed.
+
+---
+
+## The Context Window — The AI's Working Memory
+
+The **context window** is how much the AI can "keep in mind" at once — like the size of its desk. Everything it's currently working with has to fit on that desk: your question, the conversation so far, any documents you shared.
+
+Modern AI desks are big — Claude can hold about a novel and a half's worth of text at once. But here's the key thing most people don't know:
+
+**When your conversation ends, the desk is wiped clean.** The AI doesn't remember you between chats (unless the app specifically saves and reloads notes about you). Each new conversation starts fresh. It's not being rude — it's just how the machinery works.
+
+---
+
+## How Did It Get So Smart? (Training)
+
+Two phases, like raising a brilliant child:
+
+**Phase 1 — Reading everything.** The model "reads" a giant chunk of the internet, books, and articles, playing one game trillions of times: *guess the next word*. Getting good at this game secretly requires learning grammar, facts, logic, and even some reasoning. This takes months and costs millions of dollars in computing power.
+
+**Phase 2 — Finishing school.** The raw model knows a lot but has no manners or judgment. So humans rate its answers — "this one's helpful, that one's rude, this one's dangerous" — and the model learns to be helpful, honest, and safe. This is why Claude answers politely instead of like a random internet forum.
+
+---
+
+## The One-Sentence Takeaway
+
+An LLM is a supercharged auto-complete that read a library, got coached by humans on how to be helpful, thinks in word-chunks called tokens, and keeps everything on a big-but-temporary desk that gets wiped after every conversation.
 ` };

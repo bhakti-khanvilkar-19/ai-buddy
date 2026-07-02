@@ -145,4 +145,66 @@ User question
 3. **Log every step** — you need to debug failures
 4. **Confirm before irreversible actions** — "Are you sure you want to process this $500 refund?"
 5. **Graceful failure** — when the agent can't complete the task, it should explain why and suggest alternatives, not silently fail
+`,
+earthling: `
+# What Are AI Agents Actually Used For?
+
+Agents are AI that can *do* things, not just chat. Here's where they're already working — in stories, not tech-speak.
+
+---
+
+## The Researcher
+
+**The situation:** You're choosing a preschool, comparing insurance plans, or researching a medical diagnosis — a decision that needs *hours* of reading.
+
+**What the agent does:** You state your question. It searches, reads dozens of sources, cross-checks claims, and hands you an organized comparison with sources listed — in minutes.
+
+**Real-life version you can try today:** Tools like Perplexity or Claude's research features do exactly this.
+
+---
+
+## The Paperwork Assistant
+
+**The situation:** Every organization drowns in documents — manuals that go stale, reports nobody has time to write.
+
+**What the agent does:** Reads the source material and writes the summary, the update, the report. When the source changes, it refreshes the documents automatically. The humans review instead of write — which is ten times faster.
+
+---
+
+## The Detective
+
+**The situation:** Something's wrong — a computer system is failing, numbers don't add up, customers are complaining — and nobody knows *why*.
+
+**What the agent does:** Works like a detective: gathers the evidence (records, logs, timelines), looks for patterns ("all the failures happen at exactly half past the hour..."), forms a theory, checks it, and reports the culprit. What used to take an expert a full day of digging can happen over a coffee break.
+
+---
+
+## The Customer Service Rep Who Never Sleeps
+
+**The situation:** You email a company at 11pm about a double charge.
+
+**What the agent does:** Reads your message, looks up your account, confirms the duplicate charge, checks the refund rules, processes the refund, and replies — all before midnight. The good ones also know their limits: a big amount or an angry customer gets handed to a human.
+
+**What this means for you:** Late-night customer service is quietly becoming... actually good. And if you run a small business, this level of service is no longer just for the big players.
+
+---
+
+## The Office Know-It-All (the good kind)
+
+**The situation:** Every workplace has questions like "how do I file this expense?" or "what's the wifi password in the Berlin office?" — answered by interrupting a colleague.
+
+**What the agent does:** Reads all the company documents once, then answers everyone's questions instantly, citing exactly which document the answer came from. No more interrupting Carol from accounting.
+
+---
+
+## What All the Good Ones Have in Common
+
+Notice the pattern across every story:
+
+1. **They know when they're done** — no endless spinning.
+2. **They show their work** — sources, receipts, reasoning.
+3. **They know their limits** — big decisions and sensitive cases go to a human.
+4. **They fail politely** — "I couldn't find this, here's who can help" instead of silence.
+
+When you evaluate any AI service — as a customer or for your own business — those four traits are exactly what to look for.
 ` };

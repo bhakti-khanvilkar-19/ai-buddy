@@ -176,4 +176,74 @@ For companies adopting AI-assisted coding:
 2. Security-sensitive code requires explicit security review
 3. AI tools must be approved and data handling reviewed for compliance
 4. Engineers are responsible for code they ship, regardless of who wrote it
+`,
+earthling: `
+# Vibe Coding Masterclass
+
+## Going from Dabbler to Confident Builder
+
+You know what vibe coding is — describing software in plain English and letting AI build it. This section is about doing it *well*: the habits that separate people who ship things they're proud of from people whose projects collapse in week two.
+
+---
+
+## Habit 1: Stay in the Loop
+
+The best vibe coders never say "build my whole idea" and walk away. They work like someone directing a home renovation:
+
+- Ask for one room at a time, not the whole house
+- Walk through after each step and actually *look*
+- Give specific feedback: "the sign-up button is confusing" beats "make it better"
+- Catch problems while they're small
+
+The rhythm is: **ask → look → adjust → repeat.** Twenty small rounds beat one giant request, every time.
+
+---
+
+## Habit 2: Prototype First, Polish Later
+
+Your first version's job is *not* to be good — it's to teach you what you actually want.
+
+Build the roughest version that lets you try the idea. Use it for a day. You'll immediately discover things you never would have thought to ask for ("oh, I need this sorted by date, not name"). *Then* rebuild it properly.
+
+Professionals call the first version a "prototype" and they throw it away without guilt. You should too.
+
+---
+
+## Habit 3: Learn the AI's Failure Patterns
+
+AI-built software fails in predictable ways. Knowing them makes you a sharper inspector:
+
+**It invents things.** Sometimes the AI confidently uses a feature or service that doesn't exist — like a contractor spec'ing a brand of window that was discontinued years ago. If something never works no matter what, this might be why. Ask the AI directly: "Are you certain this exists? Double-check."
+
+**It forgets your rules.** Tell it once that you want everything in French, and five requests later it may slip back to English. Repeat important rules; better yet, restate them at the start of a new session.
+
+**It leaves doors unlocked.** Security is the AI's most consistent weak spot. Anything involving passwords, payments, or personal data needs a professional check — no exceptions.
+
+---
+
+## Habit 4: Manage the Mess
+
+Every project accumulates clutter — quick fixes, half-finished ideas, duplicated bits. Vibe-coded projects accumulate it *faster*.
+
+Once in a while, do spring cleaning: tell the AI, "Review this whole project. What's messy, duplicated, or fragile? Clean it up carefully without changing how anything works."
+
+Like an actual house, a tidy project is easier to extend and harder to break.
+
+---
+
+## When Vibe Coding Is (and Isn't) Appropriate
+
+**Great fit:** personal tools, hobby projects, club websites, prototypes, internal helpers for your small business.
+
+**Fine with care:** simple public websites, small tools others use — as long as no sensitive data is involved.
+
+**Get professionals involved:** anything handling payments, health records, or private personal data; anything where a failure hurts someone other than you.
+
+A good gut-check: *"If this breaks or leaks, who gets hurt?"* If the answer is anyone besides you, raise your standards accordingly.
+
+---
+
+## The One-Sentence Takeaway
+
+Master vibe coders work in small steps, inspect everything, expect the AI's classic mistakes, tidy up regularly — and are honest about when a project has outgrown vibes and needs a professional.
 ` };

@@ -214,4 +214,58 @@ When writing React:
 | Free, open source, bring-your-own-model | Continue.dev |
 | Quick one-off question / explanation | Claude.ai or ChatGPT |
 | Google ecosystem / long context (1M) | Gemini |
+`,
+earthling: `
+# AI Coding Assistants
+
+## Why Should a Non-Programmer Care?
+
+Because something remarkable happened: **the wall between "people who can build software" and "everyone else" is crumbling.**
+
+For decades, turning an idea into an app required learning programming languages — years of study. Now you can describe what you want in plain English, and AI writes the code. People with zero programming background are building working websites, tools, and apps.
+
+---
+
+## The Cast of Characters
+
+You'll hear these names — here's who's who, in plain terms:
+
+**Claude and ChatGPT** — The conversationalists. You chat, they write code (or anything else). Great for "build me a simple budget spreadsheet formula" or "why doesn't this thing work?"
+
+**GitHub Copilot** — The autocomplete on steroids. Lives inside the programmer's writing environment and suggests code as they type, like a co-writer finishing your sentences. (GitHub is the site where the world's programmers store their code — Microsoft owns it.)
+
+**Cursor and Windsurf** — Full writing studios rebuilt around AI. Imagine Microsoft Word, but redesigned from scratch assuming an AI co-author is always present.
+
+**Claude Code** — The most independent of the bunch. Less "helps you write" and more "you describe the job, it goes off and does it" — reads the whole project, makes the changes, tests them, reports back. Closest thing to hiring a contractor.
+
+---
+
+## What This Looks Like in Practice
+
+A real non-programmer story: a small-business owner wants a booking page for her yoga studio.
+
+**Before AI:** Hire a developer ($2,000+) or wrestle with website builders that almost-but-never-quite do what she wants.
+
+**Now:** She tells an AI assistant: "Build me a page where clients pick a class, see available spots, and book. Send me an email when someone books." The AI writes it. When something looks wrong, she says "the button is too small and I want it green" — and it fixes it. An afternoon, not a month.
+
+---
+
+## What They're Genuinely Good At
+
+- Building simple tools, pages, and automations from a description
+- Explaining error messages in plain English
+- Modifying things: "make it bigger," "add a photo here," "send a confirmation email"
+- Answering "is this possible?" honestly
+
+## Where They Still Stumble
+
+- Big, complicated systems (banking software, anything safety-critical)
+- Knowing your business rules unless you spell them out
+- **Security** — AI-built tools can have unlocked doors you can't see. If your tool handles other people's money or personal data, have a professional review it.
+
+---
+
+## The One-Sentence Takeaway
+
+AI coding assistants turn plain-English descriptions into working software — a superpower for small projects and ideas, with the caveat that anything handling money or private data still deserves a professional's eyes.
 ` };

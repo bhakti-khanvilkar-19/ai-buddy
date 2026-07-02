@@ -193,4 +193,82 @@ Now implement step 1 of the plan.
 6. **Use separators:** \`---\` or XML tags (\`<context>\`) to separate sections
 7. **Tell it what NOT to do:** "Do not add comments explaining what the code does"
 8. **Iterate:** Your first prompt is rarely your best. Test and refine.
+`,
+earthling: `
+# Getting Better Answers from AI
+
+## What is "Prompting"?
+
+A **prompt** is just what you type to the AI. And here's the secret that separates people who find AI amazing from people who find it useless:
+
+**The quality of the answer depends enormously on the quality of the ask.**
+
+Think of the AI as a brilliant new assistant on their first day. They're incredibly capable, but they don't know you, your situation, or what you actually want — unless you tell them.
+
+---
+
+## The Biggest Upgrade: Add Context
+
+Compare these two requests to a travel agent:
+
+❌ "Plan me a trip."
+
+✅ "Plan me a 5-day trip to Italy in October for two adults who love food but hate crowds, budget around $3,000, and my wife can't walk long distances."
+
+Same agent, wildly different results. AI works exactly the same way. Before you hit send, ask yourself: *would a smart stranger have enough information to help me here?*
+
+---
+
+## Show, Don't Just Tell (Examples Work Magic)
+
+If you want something in a specific style or format, **show one example**.
+
+Instead of: "Write product descriptions for my shop."
+
+Try: "Write product descriptions for my shop. Here's one I like: 'Hand-poured soy candle with notes of cedar and vanilla — like a cabin weekend in a jar.' Now write ones like that for: lavender soap, beeswax lip balm."
+
+One example teaches the AI your taste better than a paragraph of instructions.
+
+---
+
+## Ask It to Think Step by Step
+
+For anything involving logic, math, or planning, add this magic phrase: **"Think through this step by step before answering."**
+
+It's like the difference between someone blurting out an answer and someone working it out on paper first. The paper version makes fewer mistakes — same for AI.
+
+---
+
+## Give It a Role
+
+Starting with "Act as..." focuses the AI like putting on a uniform focuses a person:
+
+- "Act as an experienced kindergarten teacher and explain why the sky is blue."
+- "Act as a tough negotiator and review this contractor's quote."
+- "Act as a friendly editor and improve this email without changing my voice."
+
+---
+
+## Have a Conversation, Not a Transaction
+
+The first answer is a draft, not a verdict. The real power move is *iterating*:
+
+- "Good, but make it shorter."
+- "Less formal. I'd never say 'utilize'."
+- "Now write it again for someone who's never heard of this topic."
+
+People who get great results from AI treat it like a back-and-forth with a collaborator, not a vending machine.
+
+---
+
+## A Handy All-Purpose Recipe
+
+When it matters, cover these four things:
+
+1. **Who should the AI be?** ("Act as a career coach...")
+2. **What do you want?** ("...help me prepare answers for a job interview...")
+3. **What's the situation?** ("...it's a marketing manager role, I've been out of work 8 months, and I'm nervous about explaining the gap...")
+4. **What should the answer look like?** ("...give me 5 practice questions with strong sample answers, keep them conversational.")
+
+Do this and you'll get results that feel eerily personalized — because they are.
 ` };
