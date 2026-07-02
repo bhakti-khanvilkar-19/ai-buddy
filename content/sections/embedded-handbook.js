@@ -124,7 +124,7 @@ Call Trace:
  [<ffffffff81456789>] do_vfs_ioctl+0x1a2/0x5c0
 \`\`\`
 
-Read bottom-up: the bottom frame called the one above. `?` means the frame might be unreliable.
+Read bottom-up: the bottom frame called the one above. \`?\` means the frame might be unreliable.
 
 ---
 
@@ -161,8 +161,8 @@ The most common class of embedded Linux issues.
 
 **Debugging checklist:**
 1. Is the device tree node correct? Check compatible string matches driver
-2. Is the module loaded? `lsmod | grep my_driver`
-3. Is the device detected? `ls /sys/bus/i2c/devices/`
+2. Is the module loaded? \`lsmod | grep my_driver\`
+3. Is the device detected? \`ls /sys/bus/i2c/devices/\`
 4. Does probe see the device? Add printks or use dynamic debug
 5. What error code does probe return? (-ENODEV, -EPROBE_DEFER, -EIO)
 

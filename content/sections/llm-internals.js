@@ -15,7 +15,7 @@ Before the model sees a single character, text is converted to integers.
 \`\`\`
 "unhappiness" → ["un", "happiness"] → token IDs: [917, 8181]
 "tokenization" → ["token", "ization"] → token IDs: [3642, 2065]
-"\`\`\`python" → ["```", "python"] → token IDs: [7874, 29427]
+"\`\`\`python" → ["\`\`\`", "python"] → token IDs: [7874, 29427]
 \`\`\`
 
 **Token efficiency matters:** Code, JSON, and non-English text tokenize less efficiently than English prose. A Python function might use 2x the tokens of equivalent English description.

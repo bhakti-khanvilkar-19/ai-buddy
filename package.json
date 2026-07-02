@@ -4,6 +4,7 @@
   "description": "A personalized AI engineering learning platform",
   "type": "module",
   "scripts": {
+    "check:content": "node scripts/check-content.js",
     "lint": "eslint js/**/*.js content/**/*.js",
     "lint:fix": "eslint --fix js/**/*.js content/**/*.js",
     "format": "prettier --write js/**/*.js content/**/*.js styles/**/*.css *.html",

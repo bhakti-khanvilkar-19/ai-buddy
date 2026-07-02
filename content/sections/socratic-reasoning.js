@@ -121,7 +121,7 @@ Effective question sequence:
 4. "What page are they being redirected to incorrectly?"
 5. "Is there a redirect URL stored somewhere before authentication starts?"
 
-Usually by question 4 or 5, the developer has found the bug themselves — the `redirect_url` param is being cached and isn't cleared on auth failure.
+Usually by question 4 or 5, the developer has found the bug themselves — the \`redirect_url\` param is being cached and isn't cleared on auth failure.
 
 ---
 

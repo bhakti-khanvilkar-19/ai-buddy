@@ -35,7 +35,7 @@ Agent's plan (generated autonomously):
 
 Before acting, agentic systems reason — they think through the problem, consider alternatives, and explain their logic. This is often called **chain-of-thought** or **extended thinking**.
 
-Claude with extended thinking (`thinking` blocks):
+Claude with extended thinking (\`thinking\` blocks):
 \`\`\`
 <thinking>
 The user wants CI/CD set up. Let me check what's there first.
