@@ -168,4 +168,93 @@ If model calls refund_details() → inject full policy text
 \`\`\`
 
 This keeps the context lean while allowing depth on demand.
+`,
+embedded: `
+# Context Engineering
+
+## Why This Matters More in Embedded Work, Not Less
+
+Embedded debugging is fundamentally a context problem before it's ever a code problem. A kernel panic without the preceding dmesg is unreadable. A driver probe failure without the matching device tree node is unfixable. The single biggest lever for getting useful AI help on embedded work is **feeding it the right slice of context** — not a better prompt.
+
+---
+
+## What Belongs in the Context Window for Embedded Debugging
+
+\`\`\`mermaid
+flowchart TD
+    subgraph CW["Context for an embedded debugging session"]
+        SC[Serial console output<br/>last N lines before failure]
+        DT[Relevant device tree nodes]
+        KC[Kernel config fragment<br/>CONFIG_* flags for the subsystem]
+        SRC[Driver/application source<br/>only the relevant file(s)]
+        DS[Datasheet excerpt<br/>register map, timing diagram]
+    end
+    CW --> LLM[LLM reasoning]
+    LLM --> OUT([Root cause + fix])
+\`\`\`
+
+Skipping any one of these produces confidently wrong answers. An LLM without the device tree node will guess at compatible strings. An LLM without the kernel config will suggest a fix that's already compiled out.
+
+---
+
+## Grounding: Datasheets Are Your RAG Corpus
+
+In most AI use cases, RAG means retrieving from a company wiki. In embedded work, your highest-value grounding source is the **SoC reference manual and component datasheets** — hundreds of pages the model wasn't necessarily trained on for your specific silicon revision.
+
+\`\`\`
+Bad (no grounding):
+"How do I configure the I2C clock stretching on this SoC?"
+→ Model guesses based on generic I2C knowledge, may not match your silicon
+
+Good (grounded):
+"Here's the I2C controller register section from the [SoC] reference
+manual [pasted excerpt]. Configure clock stretching for a 400kHz bus
+with a sensor that needs up to 25ms stretch time."
+→ Model reasons from your actual register map, not a generic guess
+\`\`\`
+
+**Practical habit:** keep a folder of relevant datasheet excerpts (not the full 2000-page PDF — extracted, relevant sections) that you paste in for register-level questions. This is context engineering in its most literal form for hardware work.
+
+---
+
+## Context Pruning for Long Boot Logs
+
+Boot logs and kernel traces are often thousands of lines, but only a handful are relevant to a given failure. Prune before you paste:
+
+\`\`\`bash
+# Don't paste the whole boot log — extract the relevant window
+dmesg | grep -A 20 -B 5 "your_driver\|Call Trace\|BUG:"
+
+# For journalctl, scope to the failing service and time window
+journalctl -u my-service --since "10 min ago" --no-pager
+\`\`\`
+
+A 200-line focused excerpt produces a better diagnosis than a 5,000-line dump — the signal gets diluted, not enhanced, by including everything.
+
+---
+
+## Memory Across a Debugging Session
+
+Board bring-up and driver debugging are rarely one-shot — you're often iterating over hours or days. Keep a running context document as you go:
+
+\`\`\`
+## Bring-up log: RK3588 custom carrier board
+
+Confirmed working:
+- Power rails all in spec (scope captures in /bringup/power/)
+- U-Boot reaches prompt, DDR init passes
+
+Known issue:
+- eMMC not detected — sdhci-of-arasan probe fails with -ENODEV
+- Ruled out: device tree compatible string (matches driver), pinctrl (verified via /sys)
+- Suspect: eMMC not getting VCCQ before probe — checking power sequencing next
+\`\`\`
+
+Paste this running log as context at the start of each new AI-assisted session — it prevents the model (and you) from re-investigating things you've already ruled out.
+
+---
+
+## The One-Sentence Takeaway
+
+For embedded work, context engineering means feeding the model the specific serial output, device tree node, kernel config, and datasheet excerpt relevant to your exact failure — generic embedded knowledge without your board's specifics produces plausible-sounding wrong answers every time.
 ` };

@@ -238,4 +238,105 @@ async def process_batch(items):
 
 results = asyncio.run(process_batch(items))  # runs all in parallel
 \`\`\`
+`,
+embedded: `
+# AI APIs & Integration
+
+## The Air-Gap Question Comes First
+
+Before choosing an API provider, answer the question that doesn't come up in typical web development: **is this development machine allowed to reach the internet at all?**
+
+Many embedded projects — defense, industrial control, automotive pre-production — work on networks that are partially or fully isolated. This changes the entire integration approach.
+
+| Environment | AI integration approach |
+|---|---|
+| Standard dev laptop, internet access | Cloud API (Anthropic, OpenAI) — simplest, best quality |
+| Corporate network, outbound HTTPS allowed | Cloud API through proxy — verify with IT before assuming it works |
+| Isolated lab network, no internet | Local model via Ollama/llama.cpp on a machine with the weights pre-loaded |
+| Fully air-gapped (classified/ITAR) | Local model only, weights transferred via approved media, no exceptions |
+
+See the "AI in Secure Environments" section for the full decision framework — but the short version for embedded engineers: check your network policy before you architect anything.
+
+---
+
+## Calling Claude/GPT for Embedded-Adjacent Tasks
+
+For teams that do have API access, the pattern for embedded-adjacent work (log analysis, driver generation, datasheet Q&A) is the same tool-calling pattern used everywhere, with your embedded artifacts as the payload:
+
+\`\`\`python
+import anthropic
+
+client = anthropic.Anthropic()
+
+def diagnose_boot_failure(serial_log: str, device_tree: str) -> str:
+    response = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=2048,
+        system="""You are an embedded Linux bring-up engineer.
+Analyze boot failures using the provided serial console output and
+device tree. Be specific about which driver or subsystem is failing
+and cite the exact log lines that support your conclusion.""",
+        messages=[{"role": "user", "content": f"""
+Serial console output:
+{serial_log}
+
+Relevant device tree node:
+{device_tree}
+
+The board hangs after "Starting kernel...". Diagnose the failure.
+"""}]
+    )
+    return response.content[0].text
+
+# Usage in a bring-up script
+with open("serial_capture.log") as f:
+    log = f.read()
+with open("board.dts") as f:
+    dts = f.read()
+
+print(diagnose_boot_failure(log, dts))
+\`\`\`
+
+This is a genuinely useful pattern to wire into a bring-up script — capture serial output automatically on every boot attempt, and have a diagnosis ready before you've even reached for the scope.
+
+---
+
+## Local Models for Sensitive Embedded Work
+
+When code or hardware details can't leave your network (proprietary silicon, unreleased product, export-controlled), local models via Ollama give you the same coding-assistant workflow without the data leaving your machine:
+
+\`\`\`bash
+ollama run codestral      # code-specialized, good for driver/firmware code
+ollama run llama3.3       # best general open-source quality
+
+# OpenAI-compatible endpoint — same code as above, just point base_url locally
+\`\`\`
+
+Quality is lower than frontier cloud models, but for grounded tasks (you provide the datasheet, the driver skeleton generation, log triage) the gap matters less than for open-ended reasoning.
+
+---
+
+## Rate Limits and Batch Processing for Log Analysis
+
+If you're running AI-assisted analysis across a fleet's worth of logs (field returns, CI test logs from a hardware-in-the-loop rig), batch APIs are the right tool — real-time isn't needed and the cost savings are significant:
+
+\`\`\`python
+# Analyze 500 field-return logs overnight instead of one at a time
+batch = client.messages.batches.create(
+    requests=[
+        {"custom_id": f"log_{i}", "params": {
+            "model": "claude-haiku-4-5-20251001",
+            "max_tokens": 500,
+            "messages": [{"role": "user", "content": f"Summarize the failure in this log: {log}"}]
+        }}
+        for i, log in enumerate(field_logs)
+    ]
+)
+\`\`\`
+
+---
+
+## The One-Sentence Takeaway
+
+Before wiring any AI API into an embedded workflow, confirm your network policy allows it — cloud APIs are simplest when permitted, local models via Ollama are the right fallback for air-gapped or sensitive hardware work, and either way the highest-value use is grounding the model in your actual serial logs, device trees, and datasheets rather than asking generic questions.
 ` };

@@ -326,4 +326,84 @@ Enterprise tiers of major providers (Anthropic, GitHub, OpenAI) typically addres
 ## The One-Paragraph Takeaway
 
 AI coding assistants are now core developer infrastructure, not a personal preference — approach the decision with the same rigor as any other tooling investment: real internal metrics over vendor benchmarks, a data-handling policy set before rollout, and a risk tier that scales review requirements with what the code touches.
+`,
+embedded: `
+# AI Coding Assistants
+
+## What Works Differently for Firmware and Driver Code
+
+General-purpose coding assistants are trained overwhelmingly on web and application code — Python, JavaScript, React. They're still useful for embedded work, but you need to know where their knowledge gets thin and compensate with grounding.
+
+| Task type | How well AI coding assistants perform |
+|---|---|
+| Boilerplate (driver skeletons, Makefile/Kconfig fragments) | Strong — well-represented pattern in training data |
+| Register-level bit manipulation | Moderate — correct *pattern*, verify values against your datasheet |
+| SoC-specific peripheral quirks | Weak without grounding — provide the reference manual excerpt |
+| Kernel API usage (probe/remove, platform_driver) | Strong for recent kernel versions, weaker for older/vendor forks |
+| Timing-critical / ISR code | Use with caution — AI doesn't reason about real-time constraints or interrupt latency budgets |
+
+---
+
+## Claude Code for Embedded Projects
+
+Claude Code's ability to read your whole repository is particularly valuable for BSP and Yocto layers, where the "why" of a change often depends on files scattered across multiple layers.
+
+**Effective CLAUDE.md for an embedded repo:**
+
+\`\`\`markdown
+# Project: custom-bsp-imx8m
+
+## Target hardware
+- NXP i.MX8M Mini, custom carrier board
+- Kernel: 6.1 LTS (NXP vendor tree, not mainline)
+- Bootloader: U-Boot 2023.04
+
+## Build system
+- Yocto Kirkstone
+- Build: bitbake core-image-minimal
+- Custom layer: meta-mycompany/
+
+## Conventions
+- All device tree changes go in meta-mycompany/recipes-kernel/linux/files/
+- Never modify vendor BSP files directly — override via device tree overlay
+- Driver changes require: probe success log + dmesg output in the PR description
+
+## Hardware notes
+- I2C1: sensor bus, 400kHz, 3 devices
+- SPI1: reserved for future use, currently disabled in device tree
+- Known erratum: SoC rev A1 has a documented I2C clock-stretching bug (see datasheet erratum #12)
+\`\`\`
+
+That last "hardware notes" section is the highest-leverage addition — it's exactly the kind of tribal knowledge that prevents an AI assistant from suggesting a fix that's already known to be wrong for your specific silicon revision.
+
+---
+
+## A Realistic Workflow: Driver Skeleton to Working Code
+
+\`\`\`bash
+# 1. Generate the skeleton (fast, low-risk)
+claude "Write a Linux platform driver skeleton for an I2C temperature
+sensor. Compatible string: 'mycompany,temp-sensor-v1'. Expose readings
+via sysfs. Use kernel 6.1 API conventions."
+
+# 2. Ground it against your actual datasheet (critical step)
+claude "Here's the register map for the actual sensor [paste datasheet
+excerpt]. Update the driver to read the correct registers and apply
+the right scaling factor for the temperature conversion."
+
+# 3. Verify against hardware yourself — this step doesn't get delegated
+# Flash, probe, read dmesg, confirm sysfs values against a known reference
+
+# 4. Ask for a review pass with your team's conventions in mind
+claude "Review this driver against our CLAUDE.md conventions and check
+for missing error handling on the I2C transfer calls."
+\`\`\`
+
+Step 3 is non-negotiable — no coding assistant can verify that a register value is correct against physical hardware. That verification loop stays with you.
+
+---
+
+## The One-Sentence Takeaway
+
+AI coding assistants accelerate the boilerplate and pattern-matching parts of embedded development — driver skeletons, Yocto recipes, Kconfig fragments — but register-level correctness and hardware verification still require grounding them in your actual datasheets and testing on real silicon.
 ` };
