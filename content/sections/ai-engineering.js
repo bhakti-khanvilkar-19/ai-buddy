@@ -209,4 +209,72 @@ def safe_agent_response(user_message: str) -> str:
 
     return response
 \`\`\`
+`,
+commander: `
+# AI Engineering
+
+## Why "It Works in the Demo" Isn't a Launch Criterion
+
+Every AI feature demo looks impressive — that's the nature of generative output. The gap between a demo and a production system is AI engineering: evaluation, observability, cost control, and security. Teams that skip this gap ship features that work great in the pitch meeting and fail unpredictably in production. This is the single most common reason AI initiatives lose executive confidence after launch.
+
+**Rule of thumb for your reviews:** if a team can only show you a demo and can't show you an eval score, they're not ready to ship.
+
+---
+
+## Evaluations — Your Actual Quality Gate
+
+An eval suite is the AI equivalent of a test suite, and it should be a launch-blocking requirement, not a nice-to-have.
+
+**What to ask for before approving launch:**
+- A test set of real (or realistic) scenarios — not cherry-picked demo cases
+- A quality score with a defined passing threshold
+- A regression check: does the score stay above threshold after every prompt or model change?
+
+**The trap to watch for:** teams that "eyeball" quality by trying a handful of prompts. That doesn't scale and doesn't catch regressions. Insist on numbers.
+
+---
+
+## Observability — Can You See What It's Doing?
+
+If your team can't answer "what did the AI actually do for user X on Tuesday," you have an unmonitored system in production — the AI equivalent of shipping code with no logging.
+
+**Minimum bar for production AI:**
+- Every request logged: input, output, cost, latency, which tools were used
+- Traceable: can you reconstruct the full decision path for any single interaction?
+- Alertable: does someone get paged when quality drops or costs spike?
+
+This isn't optional infrastructure — it's the difference between catching a problem in an hour versus discovering it from a customer complaint three weeks later.
+
+---
+
+## Cost — The Line Item That Surprises Executives
+
+AI cost doesn't scale like traditional software cost. A traditional feature costs roughly the same to serve user #1 and user #100,000. An AI feature's cost scales directly with usage *and* with how cleverly it's engineered.
+
+**Levers your team should already be pulling:**
+| Lever | Typical savings |
+|---|---|
+| Right-sized model (not defaulting to the biggest) | 80-90% |
+| Prompt caching | 80-90% on repeated context |
+| Batch processing for non-real-time work | 50% |
+
+**What to ask in budget reviews:** "What's our cost per completed task, and what's driving it?" If the answer is "we're using the biggest model for everything," that's an easy win sitting on the table.
+
+---
+
+## Security — Where AI-Specific Risk Actually Lives
+
+Traditional security review checklists miss AI-specific attack surfaces. Make sure your security team is evaluating:
+
+- **Prompt injection:** can malicious content in a document or webpage the AI reads hijack its behavior?
+- **Data exposure:** does the AI have access to more data than the specific task requires?
+- **Excessive permissions:** can the AI take actions beyond what the use case needs?
+
+**The governance question:** does your organization have a review process for AI features the way it has one for handling customer data? If not, that's a gap to close before the next launch, not after an incident.
+
+---
+
+## The One-Paragraph Takeaway
+
+AI engineering is the unglamorous 90% of the work that turns an impressive demo into a system you can trust in production — evaluation replaces "looks good to me," observability replaces "we'll find out from support tickets," and cost/security review replace surprises. Make these four things launch-blocking requirements, and your AI initiatives will stop losing credibility after the first incident.
 ` };
