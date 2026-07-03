@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Engineering Academy — Learn AI, Personalized to You</title>
+    <meta
+      name="description"
+      content="A premium AI engineering learning platform — from foundations to production systems. Choose your path and start learning."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/components.css" />
+    <link rel="stylesheet" href="styles/themes.css" />
+
+    <style>
+      /* ── Home page — scoped styles, built on the shared design tokens ── */
+      .home-hero {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 5rem 1.5rem 3rem;
+        text-align: center;
+      }
+      .home-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-body);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--primary);
+        background: var(--primary-glow);
+        border: 1px solid var(--border-2);
+        border-radius: 999px;
+        padding: 0.4rem 0.9rem;
+        margin-bottom: 1.5rem;
+      }
+      .home-title {
+        font-family: var(--font-heading);
+        font-size: clamp(2.25rem, 5vw, 3.5rem);
+        font-weight: 700;
+        line-height: 1.1;
+        color: var(--text);
+        margin: 0 0 1.25rem;
+      }
+      .home-title em {
+        font-style: normal;
+        color: var(--primary);
+      }
+      .home-subtitle {
+        font-family: var(--font-body);
+        font-size: 1.15rem;
+        color: var(--text-muted);
+        max-width: 640px;
+        margin: 0 auto 2.25rem;
+        line-height: 1.6;
+      }
+      .home-cta-row {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+      .home-cta-note {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        margin-top: 1rem;
+      }
+
+      .home-stats {
+        display: flex;
+        justify-content: center;
+        gap: clamp(1.5rem, 5vw, 3.5rem);
+        flex-wrap: wrap;
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 0 1.5rem 3.5rem;
+      }
+      .home-stat {
+        text-align: center;
+      }
+      .home-stat-value {
+        font-family: var(--font-heading);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .home-stat-label {
+        font-family: var(--font-body);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .home-section {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+      }
+      .home-section-title {
+        font-family: var(--font-heading);
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text);
+        text-align: center;
+        margin: 0 0 0.5rem;
+      }
+      .home-section-sub {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: var(--text-muted);
+        text-align: center;
+        max-width: 560px;
+        margin: 0 auto 2.5rem;
+      }
+
+      .home-persona-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.25rem;
+      }
+      .home-persona-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        text-decoration: none;
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .home-persona-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--border-2);
+        box-shadow: var(--shadow);
+      }
+      .home-persona-icon {
+        font-size: 1.75rem;
+      }
+      .home-persona-name {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--text);
+      }
+      .home-persona-tagline {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        font-style: italic;
+      }
+      .home-persona-link {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-top: auto;
+      }
+
+      .home-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.25rem;
+      }
+      .home-feature {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+      }
+      .home-feature-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+        display: block;
+      }
+      .home-feature-title {
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text);
+        margin-bottom: 0.4rem;
+      }
+      .home-feature-desc {
+        font-family: var(--font-body);
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        line-height: 1.55;
+      }
+
+      .home-footer {
+        text-align: center;
+        padding: 2.5rem 1.5rem 3rem;
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        border-top: 1px solid var(--border);
+        margin-top: 2rem;
+      }
+      .home-footer a {
+        color: var(--text-muted);
+      }
+    </style>
+  </head>
+  <body class="dark">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="app-header">
+      <div class="app-header-left">
+        <a href="home.html" class="logo" aria-label="AI Engineering Academy — Home">
+          <div class="logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
+            </svg>
+          </div>
+          <div class="logo-text">AI <em>Academy</em></div>
+        </a>
+      </div>
+      <div class="app-header-right">
+        <a class="header-btn" href="index.html">Launch App →</a>
+        <button class="header-btn" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <!-- ── Hero ─────────────────────────────────────────────── -->
+      <section class="home-hero">
+        <div class="home-eyebrow">✨ Personalized Learning</div>
+        <h1 class="home-title">Learn AI the way<br /><em>you</em> actually learn.</h1>
+        <p class="home-subtitle">
+          From "what even is AI?" to production agent architectures — one platform, five learning
+          paths. Pick your identity and the content, examples, and depth adapt to you instantly.
+        </p>
+        <div class="home-cta-row">
+          <a class="button button-primary" href="index.html">Start Learning →</a>
+          <a class="button button-secondary" href="#paths">See the paths</a>
+        </div>
+        <p class="home-cta-note">No sign-up required. Free and open.</p>
+      </section>
+
+      <!-- ── Stats ────────────────────────────────────────────── -->
+      <section class="home-stats" aria-label="Platform stats">
+        <div class="home-stat">
+          <div class="home-stat-value">42</div>
+          <div class="home-stat-label">Topics</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-value">5</div>
+          <div class="home-stat-label">Learning paths</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-value">100%</div>
+          <div class="home-stat-label">Free</div>
+        </div>
+      </section>
+
+      <!-- ── Persona paths ────────────────────────────────────── -->
+      <section class="home-section" id="paths">
+        <h2 class="home-section-title">Choose your path</h2>
+        <p class="home-section-sub">
+          Every path covers the same curriculum — the depth, examples, and language change to fit
+          you. Switch anytime once you're in.
+        </p>
+        <div class="home-persona-grid">
+          <a class="home-persona-card" href="index.html?for=earthling">
+            <span class="home-persona-icon" aria-hidden="true">🌱</span>
+            <div class="home-persona-name">Earthling</div>
+            <div class="home-persona-tagline">
+              "AI keeps coming up everywhere — help me actually get it"
+            </div>
+            <span class="home-persona-link">Start as Earthling →</span>
+          </a>
+          <a class="home-persona-card" href="index.html?for=cadet">
+            <span class="home-persona-icon" aria-hidden="true">🛸</span>
+            <div class="home-persona-name">Cadet</div>
+            <div class="home-persona-tagline">
+              "I'm a developer ready to build with AI — show me how"
+            </div>
+            <span class="home-persona-link">Start as Cadet →</span>
+          </a>
+          <a class="home-persona-card" href="index.html?for=commander">
+            <span class="home-persona-icon" aria-hidden="true">🌟</span>
+            <div class="home-persona-name">Commander</div>
+            <div class="home-persona-tagline">
+              "I lead technical teams and need to understand this shift"
+            </div>
+            <span class="home-persona-link">Start as Commander →</span>
+          </a>
+          <a class="home-persona-card" href="index.html?for=engineer">
+            <span class="home-persona-icon" aria-hidden="true">🤖</span>
+            <div class="home-persona-name">Engineer</div>
+            <div class="home-persona-tagline">
+              "I'm in the engine room — give me internals and production reality"
+            </div>
+            <span class="home-persona-link">Start as Engineer →</span>
+          </a>
+          <a class="home-persona-card" href="index.html?for=embedded">
+            <span class="home-persona-icon" aria-hidden="true">🔧</span>
+            <div class="home-persona-name">Embedded</div>
+            <div class="home-persona-tagline">
+              "I build firmware and hardware — show me AI that works in the real world"
+            </div>
+            <span class="home-persona-link">Start as Embedded →</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ── Features ─────────────────────────────────────────── -->
+      <section class="home-section">
+        <h2 class="home-section-title">What's inside</h2>
+        <p class="home-section-sub">
+          Built for people who want to actually understand this, not just skim it.
+        </p>
+        <div class="home-features">
+          <div class="home-feature">
+            <span class="home-feature-icon" aria-hidden="true">🧭</span>
+            <div class="home-feature-title">Personalized curriculum</div>
+            <div class="home-feature-desc">
+              The same 42 topics, reordered and rewritten for how you think — from plain-English
+              analogies to production internals.
+            </div>
+          </div>
+          <div class="home-feature">
+            <span class="home-feature-icon" aria-hidden="true">📊</span>
+            <div class="home-feature-title">Real diagrams, not walls of text</div>
+            <div class="home-feature-desc">
+              Rendered flowcharts and sequence diagrams for agent loops, RAG pipelines, transformer
+              architecture, and more.
+            </div>
+          </div>
+          <div class="home-feature">
+            <span class="home-feature-icon" aria-hidden="true">💻</span>
+            <div class="home-feature-title">Working code examples</div>
+            <div class="home-feature-desc">
+              Python, tool calling, MCP servers, agent frameworks — copy-paste-ready, not
+              pseudocode.
+            </div>
+          </div>
+          <div class="home-feature">
+            <span class="home-feature-icon" aria-hidden="true">📈</span>
+            <div class="home-feature-title">Progress tracking</div>
+            <div class="home-feature-desc">
+              Your progress is saved locally per path, so you can pick up exactly where you left
+              off.
+            </div>
+          </div>
+          <div class="home-feature">
+            <span class="home-feature-icon" aria-hidden="true">🔀</span>
+            <div class="home-feature-title">Switch anytime</div>
+            <div class="home-feature-desc">
+              Started as an Earthling and now writing code? Switch to Cadet mid-course, no progress
+              lost.
+            </div>
+          </div>
+          <div class="home-feature">
+            <span class="home-feature-icon" aria-hidden="true">🆓</span>
+            <div class="home-feature-title">Free, no account needed</div>
+            <div class="home-feature-desc">
+              Nothing to sign up for. Open the app and start — your progress lives in your browser.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Final CTA ────────────────────────────────────────── -->
+      <section class="home-hero" style="padding-top: 1rem">
+        <h2 class="home-title" style="font-size: clamp(1.75rem, 4vw, 2.5rem)">
+          Ready when you are.
+        </h2>
+        <div class="home-cta-row">
+          <a class="button button-primary" href="index.html">Launch AI Academy →</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="home-footer">
+      AI Engineering Academy — a free, open learning platform.
+      <a href="index.html">Launch the app →</a>
+    </footer>
+
+    <script>
+      /* Minimal, self-contained theme toggle — home.html doesn't load ui.js/mermaid */
+      function toggleTheme() {
+        document.body.classList.toggle('dark');
+        const isDark = document.body.classList.contains('dark');
+        localStorage.setItem('ai-buddy-theme', isDark ? 'dark' : 'light');
+        const icon = document.getElementById('theme-icon');
+        if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+      }
+
+      (function applyStoredTheme() {
+        const stored = localStorage.getItem('ai-buddy-theme');
+        if (stored === 'light') {
+          document.body.classList.remove('dark');
+          const icon = document.getElementById('theme-icon');
+          if (icon) icon.textContent = '🌙';
+        } else {
+          document.body.classList.add('dark');
+          const icon = document.getElementById('theme-icon');
+          if (icon) icon.textContent = '☀️';
+        }
+      })();
+    </script>
+  </body>
+</html>
