@@ -167,4 +167,60 @@ If these questions get blank stares, that's the gap to close.
 ## The One-Paragraph Takeaway
 
 Vibe coding is a real productivity multiplier your team is already using, and blocking it outright would be leaving value on the table — but it needs a tiered policy, not blind trust: fast and loose for internal tools, standard rigor for customer-facing work, and mandatory enhanced review for anything touching money, security, or regulated data. The engineer stays accountable either way.
+`,
+embedded: `
+# Vibe Coding
+
+## Why "Vibe Coding" Needs a Harder Line in Embedded Work
+
+In web development, a vibe-coded bug means a broken page — annoying, cheap to fix, nobody gets hurt. In embedded work, a vibe-coded bug can mean a bricked board, a safety-relevant fault, or a fleet of devices in the field running unverified logic. The productivity case for AI-assisted development is just as real here — but the acceptable-risk line sits in a very different place.
+
+---
+
+## Where AI-Assisted Development Is a Clear Win
+
+- **Build tooling:** scripts, CI configuration, log parsers, test harnesses — no different from any other software domain
+- **Boilerplate generation:** driver skeletons, Kconfig fragments, device tree overlay templates — fast to generate, fast to verify against a working example
+- **Documentation:** generating or updating BSP documentation from source, README files, bring-up checklists
+- **Diagnostic tooling:** scripts that parse dmesg/journalctl and flag anomalies — these run on your dev machine, not the target
+
+## Where It Needs Deliberate Friction
+
+- **Register-level code:** always verify bit values against the actual datasheet, not just "it compiled and looks right"
+- **Timing-sensitive code:** ISRs, real-time loops — AI has no model of your interrupt latency budget or hardware timing constraints
+- **Anything that flashes or reconfigures hardware directly:** a vibe-coded script that writes to flash without proper validation can brick a board that then requires physical recovery (JTAG unbrick, or in the worst case, isn't recoverable)
+- **Safety-relevant code paths:** anything touched by ISO 26262 or IEC 61508 requirements goes through the same review process as human-written code — no exceptions for "the AI wrote most of it"
+
+---
+
+## The Datasheet-Verification Habit
+
+The single most important discipline for embedded vibe coding: **never trust a generated register value without checking it against the actual datasheet.**
+
+\`\`\`
+AI generates:
+    // Set I2C clock to 400kHz
+    writel(0x0034, I2C_CLKDIV_REG);
+
+Your verification step (non-negotiable):
+    Open the SoC reference manual, confirm 0x0034 actually produces
+    400kHz for YOUR clock source frequency — the AI's training data
+    likely includes examples from a different SoC or clock tree.
+\`\`\`
+
+This takes thirty seconds and catches a category of bug that's otherwise invisible until the hardware behaves strangely in a way that's hard to trace back to "wrong clock divider."
+
+---
+
+## A Sane Team Policy
+
+1. **Prototyping and lab tooling:** AI-assisted freely, no special review
+2. **Driver and BSP code targeting real hardware:** AI-assisted generation is fine, but every register value and timing parameter gets manually verified against the datasheet before merge — treat this the same as you'd treat a human engineer's first draft
+3. **Anything safety-relevant:** follow your existing functional safety process regardless of authorship — AI-assisted code doesn't get a shortcut through ASPICE/ISO 26262 review, and arguably deserves more scrutiny, not less, until your team has track record with it
+
+---
+
+## The One-Sentence Takeaway
+
+AI-assisted development speeds up the boilerplate, tooling, and documentation work in embedded projects significantly, but register values, timing-critical code, and anything that touches real hardware or safety requirements still needs the same rigorous verification a human engineer's work would get — the datasheet doesn't care who wrote the code.
 ` };

@@ -245,4 +245,72 @@ The capability that makes agents valuable — autonomy — is the same thing tha
 ## The One-Paragraph Takeaway for Your Next Staff Meeting
 
 Agents let you ship *outcomes* instead of *interfaces*, which is why they're the biggest lever available on your roadmap right now — but they fail differently than the software your team is used to shipping: not with a wrong answer on screen, but with a wrong action taken in the world. Approve agent projects the way you'd approve any system with real-world side effects — clear trust tiers, a human checkpoint on anything irreversible, and evals before launch, not after an incident.
+`,
+embedded: `
+# AI Agents
+
+## Agents in an Embedded Context
+
+An agent in the embedded world isn't running on your target hardware — it's running on your development machine, with tools that touch your build system, your debugger, and your serial console. Think of it as a very capable lab assistant: it can flash the board, read the trace, and try again, but it never runs *on* the MCU itself.
+
+\`\`\`mermaid
+flowchart TD
+    A[Observe: read dmesg/journalctl/serial output] --> B[Think: hypothesize root cause]
+    B --> C[Plan: pick next diagnostic step]
+    C --> D[Act: run command / read file / grep source]
+    D --> E[Reflect: does evidence match hypothesis?]
+    E -->|not resolved| A
+    E -->|resolved| F([Report root cause + fix])
+\`\`\`
+
+This loop is the same agent loop used everywhere else in AI — the only difference is the toolset: instead of web search and databases, an embedded-focused agent's tools are things like \`dmesg\`, \`journalctl\`, \`addr2line\`, JTAG scripts, and your build system.
+
+---
+
+## A Realistic Embedded Agent Task
+
+\`\`\`
+Goal: "Board hangs intermittently after 4-6 hours of runtime under load.
+No watchdog trigger, no OOM in the logs."
+
+Agent loop:
+1. Observe: read the last 500 lines of serial console before the hang
+2. Think: no crash signature — likely a hardware/power issue, not a
+   software panic. Check for patterns around timing.
+3. Act: grep dmesg history for thermal throttling events
+4. Observe: found repeated "cpu thermal: throttling" entries in the hours
+   before each hang
+5. Think: correlate throttle events with ambient load — hang happens
+   ~30min after throttling starts
+6. Act: check the power rail scope captures around the hang timestamp
+7. Reflect: VDD_CORE dips below spec during throttle recovery — likely
+   PMIC/decoupling issue, not a software bug
+8. Report: root cause is a power delivery marginal condition surfaced
+   under thermal stress, not a kernel bug — recommend hardware review
+\`\`\`
+
+Notice this agent never touches the target board directly — it reasons over logs, scope captures, and source code you feed it. That's the right trust tier for embedded work: **read-only diagnostic reasoning**, with the engineer deciding and executing any actual hardware or flash operation.
+
+---
+
+## Where Agents Add Real Value in Embedded Workflows
+
+- **Log triage:** feeding hours of dmesg/journalctl output and getting a ranked list of anomalies instead of manually scrolling
+- **Driver skeleton generation:** "write a platform driver skeleton for this device tree node" — saves the boilerplate, you review the hardware-specific logic
+- **Cross-referencing datasheets:** describe a register behavior, get candidate causes cross-referenced against the SoC reference manual you provide
+- **Build system debugging:** parsing Yocto/Buildroot failure output and identifying the actual failing recipe, not just the top-level error
+
+---
+
+## Where to Keep the Human Firmly in the Loop
+
+- **Anything that flashes hardware** — a bad flash on a bricked board is expensive and sometimes unrecoverable
+- **Power sequencing changes** — get these reviewed by a hardware engineer regardless of how confident the agent's suggestion looks
+- **Safety-relevant code paths** (see Functional Safety section) — agent-suggested changes here go through the same ASIL/SIL review as human-written changes, no exceptions
+
+---
+
+## The One-Sentence Takeaway
+
+In embedded work, an agent is a tireless log-reading, pattern-matching lab assistant that accelerates root cause analysis — but it stays off the hardware itself, with every flash, power change, or safety-relevant fix routed through you.
 ` };
