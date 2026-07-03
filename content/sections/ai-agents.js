@@ -175,4 +175,74 @@ That's why well-designed agents pause and ask a human before doing anything big 
 ## The One-Sentence Takeaway
 
 An agent is AI you can hand a *goal* instead of a question — it plans the steps, uses its tools, fixes its own missteps, and (if it's built right) checks with you before doing anything you can't undo.
+`,
+commander: `
+# AI Agents
+
+## The Shift Your Team Needs to Understand
+
+Every AI tool your org has used until now — chatbots, copilots, autocomplete — answers questions. An **agent** completes goals. That's not an incremental upgrade; it's a different delivery model, and it changes what "shipping an AI feature" means for your roadmap.
+
+**Chatbot delivery:** ship a Q&A interface, users do the work of stitching answers into outcomes.
+**Agent delivery:** ship an outcome — "resolved ticket," "reviewed PR," "generated report" — with no human stitching required.
+
+This is why agent-based products can compress work that used to take a team-week into an afternoon. It's also why they carry more risk per deployment.
+
+---
+
+## What This Means for Your Roadmap
+
+Agentic features are a different kind of project than the AI features you've shipped so far:
+
+| Traditional AI feature | Agentic feature |
+|---|---|
+| One model call, predictable cost | Multi-step, cost scales with task complexity |
+| Deterministic-ish scope | Scope is discovered at runtime |
+| QA: test the prompt | QA: test the *decision boundaries* |
+| Failure mode: bad answer | Failure mode: wrong *action taken* |
+| Ships in a sprint | Needs step-limits, guardrails, and rollback design |
+
+**Budgeting implication:** an agent that averages 8 tool calls per task costs roughly 8x a single-shot LLM call. Get engineering to model this before committing to a launch date — cost surprises are the #1 way agentic pilots blow their budget.
+
+---
+
+## The Build vs. Risk Tradeoff
+
+The capability that makes agents valuable — autonomy — is the same thing that makes them risky. As a decision-maker, your job is setting the **trust tier** for each agent you approve:
+
+| Tier | What it can do | Approval needed for launch |
+|---|---|---|
+| Read-only | Search, summarize, answer | Standard review |
+| Internal write | Update tickets, draft docs | Team lead sign-off |
+| External action | Send emails, post publicly | Legal/comms review |
+| Financial/irreversible | Refunds, payments, deletions | Executive sign-off + human-in-loop mandatory |
+
+**The question to ask in every agent proposal review:** "What's the worst single action this agent could take, and who confirms before it happens?" If the answer is "no one," that's not ready to ship regardless of how good the demo looked.
+
+---
+
+## Where Agents Are Already Paying Off (2025)
+
+- **Support deflection:** agents resolving 30-60% of tier-1 tickets without human involvement, with clean escalation for the rest
+- **Code review:** agent-first review passes catching issues before a human reviewer's time is spent
+- **Internal knowledge:** agents answering "how do we do X" questions that used to interrupt senior staff
+- **Incident response:** agents doing first-pass root cause analysis, cutting mean-time-to-diagnosis significantly
+
+**Pattern across all of these:** the agent handles the 80% of cases that are routine, and hands off the 20% that need judgment. That handoff design is where most of the engineering effort — and most of the value — actually lives.
+
+---
+
+## Questions to Ask Before Greenlighting an Agent Project
+
+1. **What's the stopping condition?** If the team can't describe when the agent is "done," it will run longer and cost more than estimated.
+2. **What happens on failure?** Silent failure is unacceptable in production — demand a defined fallback (escalate to human, retry, or explain-and-stop).
+3. **Who's accountable for a bad agent decision?** Same as any other production system — this needs an owner, not "the AI did it."
+4. **What's the cost ceiling per task?** Agents can loop; without a hard cap, a bug can turn into a five-figure API bill overnight.
+5. **How will you know it's working?** Insist on evals before launch, not just a demo. A demo shows the happy path; evals show the failure rate.
+
+---
+
+## The One-Paragraph Takeaway for Your Next Staff Meeting
+
+Agents let you ship *outcomes* instead of *interfaces*, which is why they're the biggest lever available on your roadmap right now — but they fail differently than the software your team is used to shipping: not with a wrong answer on screen, but with a wrong action taken in the world. Approve agent projects the way you'd approve any system with real-world side effects — clear trust tiers, a human checkpoint on anything irreversible, and evals before launch, not after an incident.
 ` };

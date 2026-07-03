@@ -268,4 +268,62 @@ A real non-programmer story: a small-business owner wants a booking page for her
 ## The One-Sentence Takeaway
 
 AI coding assistants turn plain-English descriptions into working software — a superpower for small projects and ideas, with the caveat that anything handling money or private data still deserves a professional's eyes.
+`,
+commander: `
+# AI Coding Assistants
+
+## This Is a Tooling Decision With Real Budget and Risk Weight
+
+AI coding assistants aren't a developer-preference detail anymore — they're infrastructure that affects velocity, cost, and code quality org-wide. Treat the selection the way you'd treat any other core dev tooling decision: with a comparison matrix and a rollout plan, not "whatever the loudest engineer likes."
+
+---
+
+## The Landscape, By Decision Criteria
+
+| Tool | License cost model | Best fit | Key risk to manage |
+|---|---|---|---|
+| **GitHub Copilot** | Per-seat, predictable | IDE-embedded assistance across the org | Lowest autonomy = lowest risk, also lowest leverage |
+| **Claude Code** | Usage-based (API tokens) | Autonomous multi-file tasks, complex refactors | Cost scales with task complexity — needs budget monitoring |
+| **Cursor / Windsurf** | Per-seat + usage | Teams wanting an AI-native IDE | Requires migrating off existing IDE — change management cost |
+| **Claude / ChatGPT (chat)** | Per-seat or usage | Ad hoc questions, design discussions | Lowest integration, easiest to adopt with zero process change |
+
+**Practical recommendation for most orgs:** start with IDE-embedded assistance (Copilot) org-wide as the baseline — low risk, immediate productivity lift, easy to measure. Layer in autonomous tools (Claude Code) for specific high-leverage teams (platform, infra) where the ROI on more autonomy is clearest.
+
+---
+
+## The ROI Conversation, With Numbers That Hold Up
+
+Vendors will show you productivity studies claiming 30-55% speedups. Treat those as ceiling numbers, not floor numbers — actual impact depends heavily on codebase quality and task type.
+
+**What to actually measure in your own org:**
+- Cycle time on comparable tickets, before and after adoption (not vendor benchmarks)
+- PR review time — does AI-assisted code take longer or shorter to review?
+- Defect rate on AI-assisted vs. non-AI-assisted commits, tracked separately for at least one quarter
+
+**The metric most orgs skip and shouldn't:** review burden. If AI assistance produces 2x the code volume but review capacity doesn't scale, you've shifted the bottleneck, not removed it.
+
+---
+
+## Governance Questions for Your Security and Legal Teams
+
+1. **Data handling:** does the tool send your proprietary code to a third party for processing? Under what retention policy?
+2. **License provenance:** can the tool's output infringe on training-data licenses? What's the vendor's indemnification stance?
+3. **Access control:** can the tool be scoped to specific repos, or does it see everything a developer can see?
+
+Enterprise tiers of major providers (Anthropic, GitHub, OpenAI) typically address these with contractual guarantees — verify before rollout, don't assume.
+
+---
+
+## Rollout Playbook
+
+1. **Pilot with one team** for 4-6 weeks, track the metrics above
+2. **Set the governance policy first** (data handling, review requirements) — before wide rollout, not after
+3. **Tier by risk** the same way you would for vibe coding generally — unrestricted for internal tools, standard review for customer-facing code, enhanced review for anything regulated
+4. **Re-evaluate quarterly** — this category is moving fast enough that a tool ranking from six months ago may already be stale
+
+---
+
+## The One-Paragraph Takeaway
+
+AI coding assistants are now core developer infrastructure, not a personal preference — approach the decision with the same rigor as any other tooling investment: real internal metrics over vendor benchmarks, a data-handling policy set before rollout, and a risk tier that scales review requirements with what the code touches.
 ` };

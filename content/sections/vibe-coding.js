@@ -105,4 +105,66 @@ Here's the honest part. When AI builds something for you, it's like moving into 
 ## The One-Sentence Takeaway
 
 Vibe coding lets anyone turn ideas into working software by chatting — thrilling and genuinely useful, as long as you test what you build and keep anything sensitive in professional hands.
+`,
+commander: `
+# Vibe Coding
+
+## What Your Engineers Mean When They Say This
+
+"Vibe coding" is your team's shorthand for AI-first development — describing intent in natural language and letting the AI produce the implementation, with the developer reviewing rather than typing every line. It's already happening on your team whether or not it has a name in your process docs. The strategic question isn't whether to allow it — it's where to draw the line on what it's allowed to touch.
+
+---
+
+## The Productivity Case (Real, Not Hype)
+
+Teams using AI-assisted development report genuine multiples on specific work types:
+- Prototypes and internal tools: days instead of weeks
+- Boilerplate and CRUD scaffolding: near-instant instead of hours
+- First-draft implementations of well-specified features: significant time compression
+
+This is real leverage. The mistake is assuming it applies uniformly — it compresses time on well-understood, well-specified work far more than on ambiguous or safety-critical work.
+
+---
+
+## The Risk Case (Also Real, Also Not Hype)
+
+The same speed that makes vibe coding valuable also makes it a governance blind spot if unmanaged:
+
+| Risk | Why it matters at your level |
+|---|---|
+| **Security vulnerabilities** | AI-generated code has predictable weak spots (injection, hardcoded secrets, missing validation) that pass casual review |
+| **Technical debt velocity** | Debt accumulates faster because code volume increases faster than review rigor does |
+| **False confidence** | Code that "looks right" and runs is not the same bar as code that's been properly reviewed |
+| **Attribution/accountability** | "The AI wrote it" is not an acceptable answer when something breaks in production |
+
+None of these are reasons to ban the practice. They're reasons to have a policy instead of an ad hoc free-for-all.
+
+---
+
+## A Governance Framework You Can Adopt This Quarter
+
+**Tier 1 — Unrestricted:** Internal tools, prototypes, scripts with no customer or financial exposure. Ship fast, standard code review.
+
+**Tier 2 — Standard review:** Customer-facing features on existing, already-hardened systems. Same review bar as human-written code — no exceptions because "AI wrote it faster."
+
+**Tier 3 — Enhanced review required:** Authentication, payments, data handling (PII/PHI), anything regulatory. Mandatory security review regardless of who or what wrote the code. Consider requiring these areas to be human-written or human-heavily-reviewed line-by-line.
+
+**Universal rule across all tiers:** the engineer who commits the code owns it, the same as always. AI assistance doesn't change accountability.
+
+---
+
+## What to Ask Your Engineering Leads
+
+1. "What percentage of our shipped code this quarter was AI-assisted, and do we track it?"
+2. "Do we have a policy for what AI is and isn't allowed to touch?"
+3. "Has anyone specifically security-reviewed the auth/payment code for AI-introduced vulnerabilities?"
+4. "What's our rollback story if an AI-assisted feature ships a subtle bug?"
+
+If these questions get blank stares, that's the gap to close.
+
+---
+
+## The One-Paragraph Takeaway
+
+Vibe coding is a real productivity multiplier your team is already using, and blocking it outright would be leaving value on the table — but it needs a tiered policy, not blind trust: fast and loose for internal tools, standard rigor for customer-facing work, and mandatory enhanced review for anything touching money, security, or regulated data. The engineer stays accountable either way.
 ` };

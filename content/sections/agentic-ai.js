@@ -145,4 +145,70 @@ Not all agents should have the same level of autonomy. Define trust tiers:
 | **Irreversible** | Send emails, charge payments | Always |
 
 Design your agents to operate at the lowest trust tier necessary for the task.
+`,
+commander: `
+# Agentic AI
+
+## Autonomy Is the Product Decision, Not an Engineering Detail
+
+When your team pitches an "agentic" feature, the real question you're being asked to approve isn't "should we use AI here" — it's "how much decision-making authority are we willing to hand to a system that reasons probabilistically." That's a product and risk decision, and it belongs at your level, not buried in a sprint.
+
+Every agentic system makes six capability claims. Before approving, make the team show evidence for each one — not just tell you:
+
+1. **It plans** — can it decompose your actual use case, or only the demo case?
+2. **It reasons** — does its "thinking" hold up when you read the trace, or is it post-hoc justification?
+3. **It uses tools** — what happens when a tool call fails or returns garbage?
+4. **It executes multi-step** — how many steps before cost/latency becomes a problem?
+5. **It reflects** — does it actually catch its own mistakes, or does it confidently continue?
+6. **It recovers** — what's the fallback when it's stuck?
+
+A team that can't answer #6 with specifics isn't ready to launch, no matter how good #1-5 look.
+
+---
+
+## The Cost Curve Nobody Puts in the First Slide
+
+\`\`\`mermaid
+flowchart LR
+    A[Single LLM call<br/>1x cost] --> B[Simple agent<br/>3-5 tool calls<br/>3-5x cost]
+    B --> C[Multi-agent system<br/>parallel workers<br/>10-50x cost]
+    C --> D[Production scale<br/>+ retries + evals<br/>+ observability overhead]
+\`\`\`
+
+Agentic architectures trade cost for capability. That's often the right trade — but it needs to be modeled explicitly against the value delivered, not discovered in the first month's cloud bill. Ask engineering for a **cost-per-completed-task** number, not a cost-per-API-call number — the former is what actually shows up in your budget.
+
+---
+
+## Reframing "Reliability" for Agentic Systems
+
+Your team is used to reliability meaning uptime and correctness. For agentic systems, add two more dimensions:
+
+| Dimension | What it means | How to verify it |
+|---|---|---|
+| **Task completion rate** | % of tasks finished without human rescue | Eval suite on real historical tasks |
+| **Safe-failure rate** | % of failures that fail *visibly and safely* | Red-team the failure paths, not just the happy path |
+
+A system that succeeds 95% of the time but fails silently the other 5% is worse than one that succeeds 85% of the time and always tells you when it's stuck. Push your teams to optimize for the second property first.
+
+---
+
+## Trust Tiers as a Governance Tool
+
+This is the single most useful framework to bring into vendor evaluations and internal build reviews:
+
+| Tier | Example capability | Who approves |
+|---|---|---|
+| Read-only | Search, summarize, draft (unsent) | Team-level |
+| Local write | Edit internal docs, update tickets | Manager sign-off |
+| Network | Call external APIs, post to customer-facing systems | Director + security review |
+| Destructive | Delete data, cancel orders | VP sign-off, human-in-loop required |
+| Irreversible | Send money, send external comms at scale | Executive sign-off, human-in-loop mandatory |
+
+Ask every vendor pitching an "autonomous" solution which tier their system operates at by default — and whether that tier is configurable per deployment. If they can't answer, that's a signal.
+
+---
+
+## The One-Paragraph Takeaway
+
+Agentic AI shifts real decision-making authority from your team to a probabilistic system — which means the question in front of you isn't "is this technically impressive" but "at what trust tier, with what fallback, and at what cost per completed task." Approve based on those three answers, and require evidence, not demos.
 ` };
