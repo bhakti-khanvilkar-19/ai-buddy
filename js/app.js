@@ -32,26 +32,44 @@ function buildNav() {
     const displayTitle = section.title.replace(/^\d+\.\s*/, '');
     const soonBadge   = hasContent ? '' : '<span class="nav-badge-soon">Soon</span>';
 
-    const header = document.createElement('button');
-    header.type      = 'button';
+    /* Header row: the title itself navigates to the section; the chevron
+       only expands/collapses the "what's inside" preview below. These are
+       two separate controls because they do two separate things — the
+       previous version made every sub-topic a button that all navigated
+       to the exact same page, which looked like broken/missing content. */
+    const header = document.createElement('div');
     header.className = 'nav-section-header';
-    header.setAttribute('aria-expanded', 'false');
-    header.innerHTML = `<span class="nav-section-title">${displayTitle}${soonBadge}</span><span class="chevron" aria-hidden="true">▶</span>`;
-    header.onclick   = () => {
+
+    const titleBtn = document.createElement('button');
+    titleBtn.type      = 'button';
+    titleBtn.className = 'nav-section-title-btn';
+    titleBtn.innerHTML = `<span class="nav-section-title">${displayTitle}</span>${soonBadge}`;
+    titleBtn.onclick   = () => loadSection(section.id);
+
+    const toggleBtn = document.createElement('button');
+    toggleBtn.type      = 'button';
+    toggleBtn.className = 'nav-section-toggle';
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    toggleBtn.setAttribute('aria-label', `${displayTitle} — show topics covered`);
+    toggleBtn.innerHTML = `<span class="chevron" aria-hidden="true">▶</span>`;
+    toggleBtn.onclick   = () => {
       const expanded = wrap.classList.toggle('expanded');
-      header.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      toggleBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     };
 
-    const items = document.createElement('div');
+    header.appendChild(titleBtn);
+    header.appendChild(toggleBtn);
+
+    /* Sub-topic preview — informational only, not separately clickable,
+       since all of a section's content lives on one page. */
+    const items = document.createElement('ul');
     items.className  = 'nav-items';
     const itemList   = section.itemsByPersona?.[persona] || section.items;
     itemList.forEach(item => {
-      const el = document.createElement('button');
-      el.type      = 'button';
-      el.className = 'nav-item';
-      el.textContent = item;
-      el.onclick     = () => loadSection(section.id);
-      items.appendChild(el);
+      const li = document.createElement('li');
+      li.className   = 'nav-item';
+      li.textContent = item;
+      items.appendChild(li);
     });
 
     wrap.appendChild(header);
@@ -70,14 +88,13 @@ function loadSection(id) {
   const prevSec  = sorted[currIdx - 1];
   const nextSec  = sorted[currIdx + 1];
 
-  /* update active nav — item + section header */
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  /* update active nav — section header only (sub-topics are non-interactive) */
   document.querySelectorAll('.nav-section-header').forEach(el => el.classList.remove('nav-section-active'));
   const navSection = document.getElementById(`nav-${id}`);
   if (navSection) {
     navSection.classList.add('expanded');
-    navSection.querySelector('.nav-item')?.classList.add('active');
     navSection.querySelector('.nav-section-header')?.classList.add('nav-section-active');
+    navSection.querySelector('.nav-section-toggle')?.setAttribute('aria-expanded', 'true');
   }
 
   /* resolve content */
