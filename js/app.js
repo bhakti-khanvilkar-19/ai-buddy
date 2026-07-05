@@ -12,25 +12,25 @@ let activeSectionId = null;
 function getSortedSections(persona) {
   const curriculum = PERSONAS[persona]?.curriculum;
   if (curriculum) {
-    return curriculum.map((id) => SECTIONS.find((s) => s.id === id)).filter(Boolean);
+    return curriculum.map(id => SECTIONS.find(s => s.id === id)).filter(Boolean);
   }
-  return SECTIONS.filter((s) => !s.personas || s.personas.includes(persona));
+  return SECTIONS.filter(s => !s.personas || s.personas.includes(persona));
 }
 
 function buildNav() {
-  const nav = document.querySelector('.nav-sections');
+  const nav     = document.querySelector('.nav-sections');
   const persona = currentPersona || 'cadet';
   if (!nav) return;
   nav.innerHTML = '';
 
-  getSortedSections(persona).forEach((section) => {
+  getSortedSections(persona).forEach(section => {
     const wrap = document.createElement('div');
     wrap.className = 'nav-section';
-    wrap.id = `nav-${section.id}`;
+    wrap.id        = `nav-${section.id}`;
 
-    const hasContent = typeof SECTION_CONTENT !== 'undefined' && !!SECTION_CONTENT[section.id];
+    const hasContent   = typeof SECTION_CONTENT !== 'undefined' && !!SECTION_CONTENT[section.id];
     const displayTitle = section.title.replace(/^\d+\.\s*/, '');
-    const soonBadge = hasContent ? '' : '<span class="nav-badge-soon">Soon</span>';
+    const soonBadge   = hasContent ? '' : '<span class="nav-badge-soon">Soon</span>';
 
     /* Header row: the title itself navigates to the section; the chevron
        only expands/collapses the "what's inside" preview below. These are
@@ -41,18 +41,18 @@ function buildNav() {
     header.className = 'nav-section-header';
 
     const titleBtn = document.createElement('button');
-    titleBtn.type = 'button';
+    titleBtn.type      = 'button';
     titleBtn.className = 'nav-section-title-btn';
     titleBtn.innerHTML = `<span class="nav-section-title">${displayTitle}</span>${soonBadge}`;
-    titleBtn.onclick = () => loadSection(section.id);
+    titleBtn.onclick   = () => loadSection(section.id);
 
     const toggleBtn = document.createElement('button');
-    toggleBtn.type = 'button';
+    toggleBtn.type      = 'button';
     toggleBtn.className = 'nav-section-toggle';
     toggleBtn.setAttribute('aria-expanded', 'false');
     toggleBtn.setAttribute('aria-label', `${displayTitle} — show topics covered`);
     toggleBtn.innerHTML = `<span class="chevron" aria-hidden="true">▶</span>`;
-    toggleBtn.onclick = () => {
+    toggleBtn.onclick   = () => {
       const expanded = wrap.classList.toggle('expanded');
       toggleBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     };
@@ -63,11 +63,11 @@ function buildNav() {
     /* Sub-topic preview — informational only, not separately clickable,
        since all of a section's content lives on one page. */
     const items = document.createElement('ul');
-    items.className = 'nav-items';
-    const itemList = section.itemsByPersona?.[persona] || section.items;
-    itemList.forEach((item) => {
+    items.className  = 'nav-items';
+    const itemList   = section.itemsByPersona?.[persona] || section.items;
+    itemList.forEach(item => {
       const li = document.createElement('li');
-      li.className = 'nav-item';
+      li.className   = 'nav-item';
       li.textContent = item;
       items.appendChild(li);
     });
@@ -82,16 +82,14 @@ function buildNav() {
 function loadSection(id) {
   activeSectionId = id;
 
-  const persona = currentPersona || 'cadet';
-  const sorted = getSortedSections(persona);
-  const currIdx = sorted.findIndex((s) => s.id === id);
-  const prevSec = sorted[currIdx - 1];
-  const nextSec = sorted[currIdx + 1];
+  const persona  = currentPersona || 'cadet';
+  const sorted   = getSortedSections(persona);
+  const currIdx  = sorted.findIndex(s => s.id === id);
+  const prevSec  = sorted[currIdx - 1];
+  const nextSec  = sorted[currIdx + 1];
 
   /* update active nav — section header only (sub-topics are non-interactive) */
-  document
-    .querySelectorAll('.nav-section-header')
-    .forEach((el) => el.classList.remove('nav-section-active'));
+  document.querySelectorAll('.nav-section-header').forEach(el => el.classList.remove('nav-section-active'));
   const navSection = document.getElementById(`nav-${id}`);
   if (navSection) {
     navSection.classList.add('expanded');
@@ -112,51 +110,42 @@ function loadSection(id) {
   `;
 
   /* remove any hardcoded static progress bars */
-  container.querySelectorAll('.progress-bar').forEach((el) => {
-    el.nextElementSibling?.classList.contains('progress-label') && el.nextElementSibling.remove();
+  container.querySelectorAll('.progress-bar').forEach(el => {
+    el.nextElementSibling?.classList.contains('progress-label') &&
+      el.nextElementSibling.remove();
     el.remove();
   });
 
   /* inject dynamic progress bar */
-  const pct = Math.round(((currIdx + 1) / sorted.length) * 100);
+  const pct     = Math.round(((currIdx + 1) / sorted.length) * 100);
   const section = container.querySelector('.section');
-  section.insertAdjacentHTML(
-    'afterbegin',
-    `
+  section.insertAdjacentHTML('afterbegin', `
     <div class="progress-bar" role="progressbar"
          aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"
          aria-label="Course progress">
       <div class="progress-fill" style="width:${pct}%"></div>
     </div>
     <p class="progress-label">Section ${currIdx + 1} of ${sorted.length}</p>
-  `
-  );
+  `);
 
   /* inject prev / next navigation */
   const prevTitle = prevSec?.title.replace(/^\d+\.\s*/, '');
   const nextTitle = nextSec?.title.replace(/^\d+\.\s*/, '');
-  section.insertAdjacentHTML(
-    'beforeend',
-    `
+  section.insertAdjacentHTML('beforeend', `
     <div class="section-nav">
-      ${
-        prevSec
-          ? `<button class="button button-secondary section-nav-btn" onclick="loadSection('${prevSec.id}')">← ${prevTitle}</button>`
-          : '<span></span>'
-      }
-      ${
-        nextSec
-          ? `<button class="button button-primary section-nav-btn" onclick="loadSection('${nextSec.id}')">${nextTitle} →</button>`
-          : '<span></span>'
-      }
+      ${prevSec
+        ? `<button class="button button-secondary section-nav-btn" onclick="loadSection('${prevSec.id}')">← ${prevTitle}</button>`
+        : '<span></span>'}
+      ${nextSec
+        ? `<button class="button button-primary section-nav-btn" onclick="loadSection('${nextSec.id}')">${nextTitle} →</button>`
+        : '<span></span>'}
     </div>
-  `
-  );
+  `);
 
   updatePersonaBanner();
 
   /* convert markdown mermaid code fences into renderable mermaid divs */
-  container.querySelectorAll('pre code.language-mermaid').forEach((code) => {
+  container.querySelectorAll('pre code.language-mermaid').forEach(code => {
     const div = document.createElement('div');
     div.className = 'mermaid';
     div.textContent = code.textContent;
@@ -194,11 +183,7 @@ function resolveContent(sectionId, persona) {
     if (section) {
       const raw = section[persona] || section['default'] || section;
       /* Parse markdown strings; leave existing HTML blobs untouched */
-      if (
-        typeof raw === 'string' &&
-        !raw.trimStart().startsWith('<') &&
-        typeof marked !== 'undefined'
-      ) {
+      if (typeof raw === 'string' && !raw.trimStart().startsWith('<') && typeof marked !== 'undefined') {
         return marked.parse(raw);
       }
       return raw;
@@ -208,9 +193,9 @@ function resolveContent(sectionId, persona) {
 }
 
 function buildPlaceholder(sectionId, persona) {
-  const section = SECTIONS.find((s) => s.id === sectionId);
-  const pData = PERSONAS[persona];
-  const title = section?.title || sectionId;
+  const section  = SECTIONS.find(s => s.id === sectionId);
+  const pData    = PERSONAS[persona];
+  const title    = section?.title || sectionId;
   return `
     <h1>${title}</h1>
     <div class="concept-card">
@@ -235,18 +220,18 @@ function buildLanding() {
   if (!container) return;
 
   const sortedSections = getSortedSections(currentPersona);
-  const firstSection = sortedSections[0];
-  const totalSections = sortedSections.length;
+  const firstSection   = sortedSections[0];
+  const totalSections  = sortedSections.length;
 
   /* Read completed sections from localStorage */
-  const completedKey = `ai-academy-completed-${currentPersona}`;
-  const completed = JSON.parse(localStorage.getItem(completedKey) || '[]');
-  const completedSet = new Set(completed);
+  const completedKey  = `ai-academy-completed-${currentPersona}`;
+  const completed     = JSON.parse(localStorage.getItem(completedKey) || '[]');
+  const completedSet  = new Set(completed);
   const completedCount = completed.length;
   const pct = totalSections > 0 ? Math.round((completedCount / totalSections) * 100) : 0;
 
   /* Find the next unvisited section */
-  const nextSection = sortedSections.find((s) => !completedSet.has(s.id)) || firstSection;
+  const nextSection = sortedSections.find(s => !completedSet.has(s.id)) || firstSection;
 
   /* Greeting based on time */
   const hour = new Date().getHours();
@@ -289,9 +274,7 @@ function buildLanding() {
       </div>
 
       <!-- Next up -->
-      ${
-        nextSection
-          ? `
+      ${nextSection ? `
         <div class="dashboard-section-label">Continue Learning</div>
         <div class="next-lesson-card" onclick="loadSection('${nextSection.id}')" role="button" tabindex="0">
           <div>
@@ -301,18 +284,14 @@ function buildLanding() {
           </div>
           <div class="next-lesson-arrow">→</div>
         </div>
-      `
-          : ''
-      }
+      ` : ''}
 
       <!-- Learning path -->
       <div class="dashboard-section-label">Your Learning Path</div>
       <div class="dashboard-path-grid">
-        ${sortedSections
-          .slice(0, 9)
-          .map((s, i) => {
-            const done = completedSet.has(s.id);
-            return `
+        ${sortedSections.slice(0, 9).map((s, i) => {
+          const done = completedSet.has(s.id);
+          return `
             <button type="button" class="dashboard-path-card" onclick="loadSection('${s.id}')"
                     aria-label="Go to ${s.title.replace(/^\d+\.\s*/, '')}">
               <div class="dashboard-path-card-num">${done ? '✓ Done' : `#${i + 1}`}</div>
@@ -322,19 +301,14 @@ function buildLanding() {
               </div>
             </button>
           `;
-          })
-          .join('')}
+        }).join('')}
       </div>
 
-      ${
-        firstSection
-          ? `
+      ${firstSection ? `
         <button class="button button-primary" style="margin-top:.5rem" onclick="loadSection('${firstSection.id}')">
           Start learning →
         </button>
-      `
-          : ''
-      }
+      ` : ''}
 
     </div>
   `;
@@ -347,11 +321,11 @@ function initApp() {
 
   mermaid.initialize({
     startOnLoad: false,
-    theme: document.body.classList.contains('dark') ? 'dark' : 'default',
+    theme: document.body.classList.contains('dark') ? 'dark' : 'default'
   });
 
   initPersona(); /* from persona.js — shows overlay or restores persona */
-  initSearch(); /* from ui.js */
+  initSearch();  /* from ui.js */
 }
 
 document.addEventListener('DOMContentLoaded', initApp);
@@ -359,7 +333,7 @@ document.addEventListener('DOMContentLoaded', initApp);
 /* ── Called after persona is set ────────────────────────── */
 /* Override selectPersona to rebuild nav + show landing     */
 const _originalSelect = selectPersona;
-window.selectPersona = function (id) {
+window.selectPersona = function(id) {
   _originalSelect(id);
   buildNav();
   buildLanding();
