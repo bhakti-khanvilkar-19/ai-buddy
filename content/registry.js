@@ -258,5 +258,18 @@ const SECTIONS = [
     title: '42. AI Engineering Production Stack',
     personas: ['cadet','commander','engineer'],
     items: ['End-to-End Architecture','Frontend Layer','API Gateway','Agent Layer','RAG Layer','Memory Layer','Vector Database','LLM Layer','Observability','Evaluation','Monitoring']
+  },
+  {
+    id: 'ai-tools-playbook',
+    title: '43. AI Tools Playbook',
+    personas: ['earthling','cadet','commander','engineer','embedded'],
+    items: ['Which Tool When','How to Prompt Well','Template Prompts'],
+    itemsByPersona: {
+      earthling: ['ChatGPT vs Claude vs Gemini vs Copilot','How to Talk to It','Everyday Template Prompts'],
+      cadet:     ['Choosing Your Daily Driver','Giving Real Context','Coding Template Prompts','Custom Instructions'],
+      commander: ['Which Tool for Which Task','Prompting Like an Executive','Leadership Template Prompts'],
+      engineer:  ['Chat UI vs API vs Claude Code','Anatomy of a Production Prompt','When to Turn a Prompt into a Skill','Advanced Template Prompts'],
+      embedded:  ['Grounding Beats Tool Choice','Chat UI vs Local/Air-Gapped','Hardware Template Prompts']
+    }
   }
 ];
