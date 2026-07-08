@@ -263,13 +263,13 @@ const SECTIONS = [
     id: 'ai-tools-playbook',
     title: '43. AI Tools Playbook',
     personas: ['earthling','cadet','commander','engineer','embedded'],
-    items: ['Which Tool When','How to Prompt Well','Template Prompts'],
+    items: ['Which Tool When','Which Model When','Using AI Efficiently','How to Prompt Well','Template Prompts'],
     itemsByPersona: {
-      earthling: ['ChatGPT vs Claude vs Gemini vs Copilot','How to Talk to It','Everyday Template Prompts'],
-      cadet:     ['Choosing Your Daily Driver','Giving Real Context','Coding Template Prompts','Custom Instructions'],
-      commander: ['Which Tool for Which Task','Prompting Like an Executive','Leadership Template Prompts'],
-      engineer:  ['Chat UI vs API vs Claude Code','Anatomy of a Production Prompt','When to Turn a Prompt into a Skill','Advanced Template Prompts'],
-      embedded:  ['Grounding Beats Tool Choice','Chat UI vs Local/Air-Gapped','Hardware Template Prompts']
+      earthling: ['ChatGPT vs Claude vs Gemini vs Copilot','Which Model to Pick','Using It Efficiently','How to Talk to It','Everyday Template Prompts'],
+      cadet:     ['Choosing Your Daily Driver','Which Model & What "Auto" Means','Giving Real Context','Ask/Plan/Agent Modes & Credits','Compact, Clear, Fork & Cost Commands','Coding Template Prompts','Custom Instructions'],
+      commander: ['Which Tool for Which Task','Which Model & What It Costs','Prompting Like an Executive','A Cost Norm for Your Team','Leadership Template Prompts'],
+      engineer:  ['Chat UI vs API vs Claude Code','Model & Reasoning-Effort Selection','Working Efficiently: Modes & Context Budgeting','Compact, Clear, Fork & Cost Commands','Anatomy of a Production Prompt','When to Turn a Prompt into a Skill','Advanced Template Prompts'],
+      embedded:  ['Grounding Beats Tool Choice','Chat UI vs Local/Air-Gapped','Model & Reasoning Effort for Firmware','Working Efficiently & Commands','Hardware Template Prompts']
     }
   }
 ];
