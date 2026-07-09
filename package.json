@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://local_proxy@127.0.0.1:41729/git/bhakti-khanvilkar-19/ai-buddy"
+    "url": "git+https://github.com/bhakti-khanvilkar-19/ai-buddy.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["ai", "learning", "education", "llm", "agents", "prompt-engineering"],
+  "author": "Bhakti Khanvilkar",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
