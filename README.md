@@ -16,6 +16,8 @@ A personalized AI engineering learning platform — from "what even is AI?" to p
 | 🤖 Engineer | AI/ML engineers who want internals and production tradeoffs |
 | 🔧 Embedded | Firmware/hardware engineers — AI grounded in real constraints |
 
+> **Note:** Embedded is currently hidden from the persona pickers in the UI (see the `hidden` flag on the `embedded` entry in `js/persona.js`) but its content is fully built — remove the flag to bring it back. Still reachable directly via `index.html?for=embedded`.
+
 Pick a path from the home page, or jump straight to one via `index.html?for=<persona>`. Switch anytime from the persona badge in the header — nothing is lost.
 
 ## Tech stack

@@ -197,6 +197,7 @@ const PERSONAS = {
   },
   embedded: {
     id:          'embedded',
+    hidden:      true, /* not shown in persona pickers/switcher — remove this flag to re-enable */
     icon:        '🔧',
     name:        'Embedded',
     color:       '#14b8a6',
@@ -286,7 +287,7 @@ function applyPersona(id) {
   if (menu) {
     menu.setAttribute('role', 'listbox');
     menu.setAttribute('aria-label', 'Select persona');
-    menu.innerHTML = Object.values(PERSONAS).map(persona => `
+    menu.innerHTML = Object.values(PERSONAS).filter(p => !p.hidden).map(persona => `
       <div class="persona-menu-item ${persona.id === id ? 'active' : ''}"
            role="option"
            aria-selected="${persona.id === id ? 'true' : 'false'}"
@@ -362,7 +363,7 @@ function openShareModal() {
   const grid = modal.querySelector('.share-grid');
   const base = window.location.origin + window.location.pathname;
 
-  grid.innerHTML = Object.values(PERSONAS).map(p => `
+  grid.innerHTML = Object.values(PERSONAS).filter(p => !p.hidden).map(p => `
     <div class="share-row">
       <span class="share-row-icon" aria-hidden="true">${p.icon}</span>
       <div class="share-row-info">
@@ -400,7 +401,7 @@ function buildPersonaOverlay() {
   const grid = document.getElementById('persona-grid');
   if (!grid) return;
 
-  grid.innerHTML = Object.values(PERSONAS).map(p => `
+  grid.innerHTML = Object.values(PERSONAS).filter(p => !p.hidden).map(p => `
     <div class="persona-card" data-id="${p.id}" onclick="selectPersona('${p.id}')">
       <span class="persona-card-icon" aria-hidden="true">${p.icon}</span>
       <div class="persona-card-name">${p.name}</div>
