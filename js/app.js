@@ -184,7 +184,8 @@ function resolveContent(sectionId, persona) {
       const raw = section[persona] || section['default'] || section;
       /* Parse markdown strings; leave existing HTML blobs untouched */
       if (typeof raw === 'string' && !raw.trimStart().startsWith('<') && typeof marked !== 'undefined') {
-        return marked.parse(raw);
+        const html = marked.parse(raw);
+        return typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(html) : html;
       }
       return raw;
     }

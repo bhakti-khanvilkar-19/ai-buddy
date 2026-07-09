@@ -21,6 +21,7 @@ export default [
         // CDN libraries
         mermaid: 'readonly',
         marked: 'readonly',
+        DOMPurify: 'readonly',
         // Cross-file app globals (defined in one script, used in another)
         SECTIONS: 'readonly',
         SECTION_CONTENT: 'readonly',
