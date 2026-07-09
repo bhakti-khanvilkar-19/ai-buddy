@@ -432,6 +432,30 @@ code {
   color: var(--accent);
 }
 
+/* Markdown-rendered fenced code blocks (```...```) — the inline `code`
+   rule above is for prose snippets only; block code gets its own box
+   matching the .code-block aesthetic used elsewhere in the app. */
+pre {
+  background: #060d18;
+  border: 1px solid rgba(26,48,80,.8);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  line-height: 1.75;
+}
+body.light pre {
+  background: #1a1f36;
+  border-color: rgba(0,0,0,.2);
+}
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  color: #c9d5f0;
+  font-size: .82rem;
+}
+
 .lead {
   font-size: 1.15rem;
   color: var(--text-muted);

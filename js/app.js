@@ -152,6 +152,16 @@ function loadSection(id) {
     code.closest('pre').replaceWith(div);
   });
 
+  /* wrap markdown-rendered tables so wide tables scroll instead of
+     overflowing the page on narrow screens */
+  container.querySelectorAll('table').forEach(table => {
+    if (table.closest('.table-container')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'table-container';
+    table.replaceWith(wrap);
+    wrap.appendChild(table);
+  });
+
   /* re-init mermaid on new content */
   try {
     mermaid.init(undefined, '#content-container .mermaid');
