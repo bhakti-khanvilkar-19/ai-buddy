@@ -211,4 +211,46 @@ Ask every vendor pitching an "autonomous" solution which tier their system opera
 ## The One-Paragraph Takeaway
 
 Agentic AI shifts real decision-making authority from your team to a probabilistic system — which means the question in front of you isn't "is this technically impressive" but "at what trust tier, with what fallback, and at what cost per completed task." Approve based on those three answers, and require evidence, not demos.
+`,
+
+engineer: `
+# Agentic AI
+
+## The Autonomy Spectrum Is a Design Choice, Not a Binary
+
+"Agentic" isn't on/off. You're choosing a point on a spectrum, and further right costs more and fails harder:
+
+\`\`\`
+Fixed workflow → LLM-routed workflow → constrained agent → open-ended agent
+  (predictable,        (some branching,     (bounded tools,    (full autonomy,
+   cheap, testable)     still bounded)        max steps)         hardest to trust)
+\`\`\`
+
+**Most production "agents" should be further left than they are.** If the task's steps are known, a workflow with LLM decision points at branches is more reliable, cheaper, and testable than a free-roaming agent. Reserve open-ended agency for tasks where the path genuinely can't be predetermined. The engineering skill is choosing the *least* autonomy that solves the problem.
+
+## Reflection Is Overrated Unless It's Grounded
+
+"The agent reflects and self-corrects" is often theater. An LLM asked "did you do that right?" with no external signal frequently says "yes" to wrong work — self-evaluation without a ground-truth signal is unreliable. Reflection works when it's grounded in something real:
+
+- Run the tests, read the actual failure — not "does this look right?"
+- Validate tool output against a schema or a second source.
+- Use a *separate* critic model/prompt with a fresh context, not the same context that produced the error (which is already biased toward it).
+
+## Planning: Plan-Then-Execute vs ReAct
+
+| Approach | Strength | Weakness |
+|---|---|---|
+| **ReAct** (interleave reason/act) | Adapts to results step-by-step | Can wander; no global view; compounding errors |
+| **Plan-then-execute** | Global structure, reviewable plan, checkpointable | Brittle if reality diverges from the plan |
+| **Plan + replan** | Robust — execute plan, replan when reality diverges | More model calls |
+
+For anything expensive or high-stakes, plan-then-execute with a **human-approved plan** bounds cost and risk: you catch a wrong direction before paying for 20 steps of execution.
+
+## The Cost Curve Is Superlinear
+
+Single call → simple agent (3–5 calls) → multi-agent (10–50 calls) → + retries + reflection + observability overhead. Measure **cost per *completed* task**, not per API call — the number that includes the failed and retried runs. A 70%-success agent's real cost includes the 30% that failed and had to be redone or escalated.
+
+## Recovery Is a Feature You Design, Not a Hope
+
+Production agents need explicit recovery: retry with backoff on transient tool failures, fall back to a simpler method or a human on repeated failure, and always terminate in a *defined* state (done, escalated, or explained-failure) — never a silent stall. "It usually works" is not a recovery strategy; enumerate the failure paths and handle each.
 ` };

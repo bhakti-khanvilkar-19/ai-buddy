@@ -204,4 +204,55 @@ Two phases, like raising a brilliant child:
 ## The One-Sentence Takeaway
 
 An LLM is a supercharged auto-complete that read a library, got coached by humans on how to be helpful, thinks in word-chunks called tokens, and keeps everything on a big-but-temporary desk that gets wiped after every conversation.
+`,
+
+engineer: `
+# Large Language Models
+
+You know what an LLM is. This is about the parts that bite you in production.
+
+## Tokens Are a Cost and Latency Model, Not Trivia
+
+Every architectural decision downstream is governed by token economics:
+
+| Fact | Production consequence |
+|---|---|
+| ~4 chars/token (English), worse for code/JSON | Your token estimates from prose don't hold for structured payloads — budget 1.5–2× |
+| You pay input **and** output tokens, output ~3–5× the price | Long system prompts on every call are a recurring tax; a verbose model is expensive twice |
+| Non-English tokenizes 2–3× worse | Multilingual apps cost more and hit context limits sooner than you'd expect |
+| Tokenization is model-specific | Never reuse a token count across providers for billing math |
+
+**KV cache is the real latency story.** Prefill (processing your prompt) is parallel and fast; decode (generating output) is sequential — one forward pass per token. This is why **output length dominates latency**, not input length, and why streaming exists. A 200-token answer to a 10K-token prompt feels slow because of the 200 sequential decode steps, not the 10K-token prefill.
+
+## Context Window: the "Lost in the Middle" Tax
+
+A 200K context window does not mean 200K tokens of *equally usable* attention. Models attend most reliably to the **start and end** of the context; information buried in the middle is measurably more likely to be ignored. Practical rules:
+
+- Put the most critical instructions/data at the **top or bottom**, never the middle of a long context.
+- More context is not free accuracy — beyond a point, recall *degrades*. Retrieval + reranking to fit less, better-ordered context often beats stuffing everything in.
+- Prompt caching (Anthropic/OpenAI) makes a large static prefix cheap on repeat calls (~90% discount on cached tokens) — architect your prompt so the stable part is cacheable and the variable part is small and last.
+
+## Fine-Tuning vs RAG vs Prompting — the Decision You'll Actually Make
+
+The most common expensive mistake is fine-tuning when you needed RAG.
+
+| Need | Reach for |
+|---|---|
+| Model doesn't *know* a fact (private/current data) | **RAG** — fine-tuning does NOT reliably teach new facts, it teaches *behavior/format* |
+| Wrong output *format* or *style* | Few-shot prompting first; fine-tune only if prompting plateaus at high volume |
+| Consistent domain *behavior* at scale, latency/cost of long prompts hurts | **Fine-tune** (LoRA/QLoRA) — bakes behavior in, shortens prompts |
+| One-off or low-volume | **Prompting** — never fine-tune what a good prompt solves |
+
+Fine-tuning teaches the model *how to behave*, not *what is true*. If your failure mode is "it doesn't know X," fine-tuning will happily produce confident, well-formatted wrong answers.
+
+## RLHF / DPO — Why the Model Refuses or Sycophants
+
+Post-training shapes the failure modes you debug: sycophancy (agreeing with a wrong premise you assert), over-refusal, and verbosity are all RLHF artifacts, not prompting bugs. Newer alignment (DPO, RLAIF) trades the reward-model complexity of classic RLHF for a simpler preference objective. When a model won't stop hedging or apologizing, that's a trained prior — steer it explicitly in the system prompt rather than assuming your prompt is malformed.
+
+## Numbers Worth Memorizing
+
+- Frontier context: 200K (Claude), 128K (GPT-4o), 1M (Gemini)
+- Rough output/input price ratio: 3–5×
+- Prompt cache discount: ~90% on cached prefix, 5-min TTL
+- "Lost in the middle": accuracy on mid-context facts can drop 20+ points vs edges
 ` };

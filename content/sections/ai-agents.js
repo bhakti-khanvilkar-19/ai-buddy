@@ -313,4 +313,69 @@ Notice this agent never touches the target board directly — it reasons over lo
 ## The One-Sentence Takeaway
 
 In embedded work, an agent is a tireless log-reading, pattern-matching lab assistant that accelerates root cause analysis — but it stays off the hardware itself, with every flash, power change, or safety-relevant fix routed through you.
+`,
+
+engineer: `
+# AI Agents
+
+You've built agents. This is about why they fail in production and what actually makes them reliable.
+
+## Error Compounding Is the Core Problem
+
+An agent's reliability is roughly **per-step reliability ^ number-of-steps**. At 95% per-step reliability, a 10-step task succeeds ~60% of the time; a 20-step task, ~36%. This is the math behind "the demo worked, production doesn't."
+
+Consequences:
+- **Minimize steps.** Every tool call is a coin flip against your reliability budget. Prefer one well-designed tool over three chained ones.
+- **Bound the loop.** A hard max-step limit is non-negotiable — without it, a confused agent burns tokens indefinitely and you find out from the bill.
+- **Fail visibly.** An agent that stops and says "I'm stuck on X" is worth more than one that silently produces a plausible-wrong result at step 15.
+
+## The Loop Is a State Machine You Must Instrument
+
+\`\`\`mermaid
+flowchart TD
+    O[Observe] --> T[Think]
+    T --> A[Act: tool call]
+    A --> R[Reflect: did it work?]
+    R -->|yes, not done| O
+    R -->|no| RETRY{retries left?}
+    RETRY -->|yes| T
+    RETRY -->|no| ESC[Escalate / stop visibly]
+    R -->|done| DONE([Return + trace])
+\`\`\`
+
+You cannot debug what you cannot see. Every production agent needs a **trace**: each step's input, the tool called, args, result, and the model's reasoning. When an agent does something wrong at step 12, the trace is the only way to find out whether it was a bad tool result, a reasoning error, or a stale-context problem.
+
+## Tool Design Is Where Agents Are Won or Lost
+
+The model only knows about a tool what its description says. Most agent failures are actually tool-interface failures:
+
+| Anti-pattern | Fix |
+|---|---|
+| One mega-tool with 15 params | Several focused tools with clear single purposes |
+| Tool returns 5KB of JSON | Return only the fields the agent needs — bloated results poison context |
+| Ambiguous description | Description should say *when* to use it, not just what it does |
+| Tool fails silently / returns error string the model ignores | Structured errors the model is instructed to handle |
+| No idempotency on write tools | Retries double-charge, double-send — make writes idempotent |
+
+## Context Management Across Steps
+
+Agent context grows every step (each tool result appends). Two failure modes:
+- **Context bloat**: by step 20 the window is full of stale tool output, cost is high, and quality drops (lost-in-the-middle). Compact old steps into summaries; keep a structured "working memory" of decisions/facts rather than raw history.
+- **Context drift**: an early wrong assumption stays in context and contaminates later reasoning. This is a real hallucination driver in long agent runs — starting a fresh sub-agent with a clean, curated context often outperforms continuing a polluted one.
+
+## Trust Tiers Are an Architecture Requirement
+
+Map every tool to a permission tier and gate accordingly:
+
+| Tier | Example | Gate |
+|---|---|---|
+| Read-only | search, read file, query | none |
+| Local write | edit file, update record | log + reversible |
+| External/irreversible | send email, charge, delete, deploy | human-in-loop confirm, always |
+
+The question in every agent design review: *"what is the worst single action this agent can take, and who confirms before it happens?"* If the answer is "nobody," it's not production-ready regardless of demo quality.
+
+## Single Agent vs Multi-Agent
+
+Reach for multiple agents when the task genuinely needs parallelism or isolated context windows — not because it sounds sophisticated. Multi-agent multiplies cost, latency, and failure surface, and adds agent-to-agent trust as a new problem. A well-scoped single agent with good tools beats an orchestra that's hard to trace.
 ` };

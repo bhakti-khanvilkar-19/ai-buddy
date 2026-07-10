@@ -190,4 +190,62 @@ def answer_with_rag(question):
     )
     return response.content[0].text
 \`\`\`
+`,
+
+engineer: `
+# RAG — Retrieval-Augmented Generation
+
+The naive "embed, search top-k, stuff into prompt" tutorial works in a demo and fails in production. This is what actually determines whether RAG works.
+
+## Retrieval Quality Is the Whole Ballgame
+
+The LLM can only be as good as what you retrieve. Most "the model hallucinated" complaints are actually **retrieval misses** — the right chunk was never in the context. Instrument this first:
+
+- **Retrieval recall@k**: of the queries where the answer exists in your corpus, how often is the right chunk in the top-k? If this is 70%, no amount of prompt engineering saves you.
+- Measure retrieval **separately** from generation. Conflating them means you can't tell whether to fix the index or the prompt.
+
+## Chunking: the Highest-Leverage, Most-Ignored Knob
+
+| Failure | Cause | Fix |
+|---|---|---|
+| Answer spans two chunks, neither is complete | Chunks too small / no overlap | 10–20% overlap; larger chunks |
+| Retrieved chunk is topically right but answer-irrelevant | Chunks too large, diluted embedding | Smaller, semantically coherent chunks |
+| Tables/code mangled | Fixed-char splitting | Structure-aware splitting; keep tables/code blocks intact |
+
+There is no universal chunk size — it's a function of your content and query type, and it must be **evaluated**, not guessed.
+
+## Hybrid + Rerank Is the Default, Not an Optimization
+
+Pure vector search misses exact matches (product SKUs, error codes, names). Pure keyword misses paraphrase. Ship **hybrid (semantic + BM25) → rerank** from day one:
+
+\`\`\`
+retrieve 20 (hybrid) → cross-encoder rerank → keep top 3–5
+\`\`\`
+
+Reranking with a cross-encoder is the single cheapest quality win in RAG — retrieve broad, rerank precise, inject narrow. Cost is one extra model call per query; quality lift is routinely 10–20 points of answer relevance.
+
+## The Failure Modes You'll Actually Debug
+
+- **Stale index**: the doc changed, the embedding didn't. You need a re-index pipeline tied to source-of-truth updates, not a one-time ingest.
+- **Contradictory chunks**: two retrieved chunks disagree (old vs new policy). The model picks one arbitrarily. Add recency/authority metadata and filter/boost on it.
+- **"I don't know" suppression**: models want to answer. Without an explicit instruction to refuse when context is insufficient, RAG confidently fabricates from partial context. Test this case explicitly.
+- **Chunk provenance**: for any regulated or high-stakes use, you must cite which chunk produced which claim — build citation in from the start, it's painful to retrofit.
+
+## Architecture Reality
+
+\`\`\`mermaid
+flowchart LR
+    Q[Query] --> HY[Hybrid retrieve top-20]
+    HY --> RR[Cross-encoder rerank]
+    RR --> F[Filter by metadata:<br/>recency, ACL, authority]
+    F --> CTX[Top 3-5 into context]
+    CTX --> LLM[LLM + 'refuse if insufficient']
+    LLM --> CITE[Answer with chunk citations]
+\`\`\`
+
+**Access control is a retrieval concern, not a prompt concern.** If different users may see different documents, ACL filtering must happen *in the retrieval query* — never rely on the LLM to withhold retrieved content it shouldn't have seen. That's a data-leak, not a UX bug.
+
+## When RAG Is the Wrong Tool
+
+RAG shines for factual lookup over a large corpus. It is a poor fit for: tasks needing the *whole* document at once (summarize this contract), reasoning over relationships across many docs (use a graph or agentic multi-hop retrieval), or when the corpus is small enough to just fit in context (skip the infra, stuff it).
 ` };

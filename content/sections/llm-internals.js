@@ -149,4 +149,51 @@ d_model=4096 → d_ff=16384 → d_model=4096
 \`\`\`
 
 This is where most of the model's "knowledge" is stored — facts and patterns that don't require cross-token attention. The FFN acts as a key-value memory: certain patterns in the input activate certain neurons that store specific knowledge.
+`,
+
+engineer: `
+# LLM Internals Deep Dive
+
+The default treatment covers the mechanics. Here's why the internals matter when you're optimizing inference cost, choosing a serving stack, or debugging why a model behaves the way it does.
+
+## Attention Is O(n²) — This Governs Your Whole Cost Curve
+
+Self-attention compares every token to every other token: **compute and memory scale quadratically with sequence length**. Doubling context roughly quadruples attention cost. This single fact explains:
+
+- Why long-context calls get expensive fast, and why providers price/limit context aggressively.
+- Why the industry ships approximations: **FlashAttention** (IO-aware, same math, far less memory movement), **sliding-window / sparse attention**, **Grouped-Query Attention (GQA)** and **Multi-Query Attention (MQA)** which shrink the KV cache by sharing K/V heads.
+- Why the KV cache — not the weights — is often the memory bottleneck during serving.
+
+## The KV Cache Is the Thing You Actually Manage in Serving
+
+During generation, every past token's K and V vectors are cached so you don't recompute them each step. Consequences that show up in vLLM/TGI tuning:
+
+| Property | Implication |
+|---|---|
+| KV cache grows linearly with sequence length × batch | It, not model weights, usually caps your max batch size / concurrent requests |
+| Memory = layers × 2 × seq_len × d_model × batch × dtype | Long contexts × high concurrency = OOM; this is the math behind "why can't I batch more" |
+| PagedAttention (vLLM) | Treats KV cache like OS paging — the key innovation behind modern high-throughput serving |
+| GQA/MQA | Shrink KV cache 4–8×, trading a little quality for much higher throughput |
+
+If you serve your own models, **KV-cache management is 80% of the performance work.**
+
+## Quantization: the Cost/Quality Dial You Will Turn
+
+Weights don't need FP16. Quantization trades precision for memory and speed:
+
+| Format | ~Size vs FP16 | Quality | Use when |
+|---|---|---|---|
+| FP16/BF16 | 1× | baseline | Training, quality-critical |
+| INT8 / FP8 | ~0.5× | near-lossless | Default production serving |
+| INT4 (GPTQ/AWQ) | ~0.25× | small, task-dependent loss | Fit bigger models on fewer GPUs |
+
+A 70B model at INT4 fits where a 34B at FP16 would — often a better quality/$ trade than running a smaller model at full precision. **Benchmark on your task**, not on generic perplexity; quantization loss is uneven across capabilities.
+
+## Positional Encoding Determines Context Extrapolation
+
+Why some models "support" long context better: **RoPE** (rotary) encodes position as rotation and extrapolates beyond training length far better than the original sinusoidal scheme — and RoPE scaling tricks (NTK/YaRN) are how models get extended from, say, 8K training to 128K serving. When a model degrades sharply past a certain length, you're seeing positional extrapolation failure, not an attention bug.
+
+## Why This Matters Even If You Only Call APIs
+
+You don't serve the model, but these internals explain the pricing and limits you design around: output tokens cost more (sequential decode), long context costs superlinearly (O(n²) attention), and "supported context" ≠ "reliable context" (positional extrapolation + lost-in-the-middle). Architecting around these beats fighting them.
 ` };

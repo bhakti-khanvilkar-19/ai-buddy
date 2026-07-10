@@ -257,4 +257,46 @@ Paste this running log as context at the start of each new AI-assisted session �
 ## The One-Sentence Takeaway
 
 For embedded work, context engineering means feeding the model the specific serial output, device tree node, kernel config, and datasheet excerpt relevant to your exact failure — generic embedded knowledge without your board's specifics produces plausible-sounding wrong answers every time.
+`,
+
+engineer: `
+# Context Engineering
+
+Andrej Karpathy's framing: prompt engineering is what you say; context engineering is *everything the model sees at inference time* — and it's the higher-leverage discipline. In production, context assembly is where quality and cost are actually decided.
+
+## The Context Budget Is a Real Budget
+
+Every token in context is paid on **every turn**, adds latency, and — past a point — *reduces* accuracy. Treat the window as a scarce resource to allocate, not a bucket to fill:
+
+\`\`\`
+[system/instructions]  small, stable, CACHEABLE — put first
+[retrieved knowledge]  dynamic, reranked to fit — the variable cost
+[conversation history] compressed/summarized past N turns
+[tool results]         extracted fields only, not raw dumps
+[current query]        last
+\`\`\`
+
+Design the stable prefix to be **prompt-cacheable** (≈90% discount on repeat calls) and keep the variable, uncacheable part small and at the end.
+
+## Lost in the Middle Is a Design Constraint
+
+Models attend most reliably to the **start and end** of context. This isn't a tuning issue — it's structural. So:
+- Critical instructions and the most-relevant retrieved chunk go at the **edges**, never buried mid-context.
+- Reranking exists partly to put the best chunk *last* (closest to the query), where the model attends most.
+- Filling a 200K window with 200K tokens of marginally-relevant context measurably *lowers* accuracy vs a curated 20K. More is not better.
+
+## Compression and Pruning Are Not Optional at Scale
+
+Long-running sessions and agents accumulate context. Strategies, in order of preference:
+- **Extract, don't dump**: a tool returns 5KB JSON → put the 3 fields you need (50 tokens) into context, not the blob.
+- **Rolling summary**: keep the last few turns verbatim, replace older history with an LLM-generated summary of decisions/facts.
+- **Structured working memory**: maintain an explicit state object (goal, completed steps, established facts, open questions) and inject *that* each turn instead of raw history — far more token-efficient and drift-resistant.
+
+## Context Poisoning: the Subtle Production Bug
+
+Once a wrong fact or abandoned approach is in context, it contaminates all downstream reasoning — the model treats its own prior output as ground truth. This is a leading cause of agents that "get stuck being wrong." Mitigations: keep contexts short and task-scoped, spawn fresh sub-agent contexts for distinct subtasks rather than one ever-growing thread, and never let failed-attempt output linger in the working context.
+
+## Dynamic Assembly Beats Static Prompts
+
+The production pattern isn't one big prompt — it's a **context assembly pipeline** that, per request, retrieves + reranks knowledge, pulls relevant memory, extracts tool results, compresses history, and orders it all for attention. The prompt template is the smallest part; the assembly logic is the product.
 ` };
