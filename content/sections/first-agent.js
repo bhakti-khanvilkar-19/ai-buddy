@@ -244,4 +244,46 @@ def logged_agent_call(user_message: str) -> str:
 \`\`\`
 
 Logs let you identify: where it fails, what it costs, how long it takes, which tools it uses most.
+`,
+
+engineer: `
+# Building Your First Agent
+
+You can wire up a tool loop in an afternoon. Making it *production-grade* is the actual work — here's what separates a demo agent from one you'd put in front of users.
+
+## Start With the Eval, Not the Agent
+
+Before writing the loop, build a **test set of real tasks with known-good outcomes**. Without it you're tuning blind — you'll change a prompt, it'll feel better, and you'll have no idea if you regressed the other 80% of cases. The eval set is the single highest-leverage artifact in the whole project. 15–30 representative tasks is enough to start.
+
+## The Reliability Checklist
+
+A loop that calls tools is not an agent you can ship. It needs:
+
+- [ ] **Max-step limit** — hard cap, so a confused run terminates instead of burning budget
+- [ ] **Structured tool errors** — tools return errors the model is instructed to handle, not exceptions that crash or strings it ignores
+- [ ] **Idempotent writes** — retries must not double-send/double-charge
+- [ ] **Tracing** — every step's input/tool/args/result/reasoning captured for debugging
+- [ ] **Cost + latency per run** logged, with alerts on outliers
+- [ ] **Defined terminal states** — done / escalated / explained-failure, never silent stall
+- [ ] **Human-in-loop gate** on any irreversible tool
+- [ ] **Timeout** on tool calls (a hung tool shouldn't hang the agent)
+
+## Model Selection: Don't Default to the Biggest
+
+Use a cheap/fast model (Haiku, GPT-4o-mini) for routing, extraction, and simple steps; reserve the expensive reasoning tier for the genuinely hard step. A common production pattern is a **cascade**: cheap model attempts, escalate to the stronger model only on low-confidence or failure. Running the flagship model for every trivial step is the most common source of agent cost blowout.
+
+## Memory: Match the Store to the Need
+
+| Need | Store |
+|---|---|
+| Within-task working state | In-context structured object |
+| Recent multi-turn history | Redis / short-term cache |
+| User preferences, durable facts | Relational DB |
+| "Recall anything relevant" | Vector store, retrieved per-turn |
+
+Don't reach for a vector DB when a struct in context or a Redis key does the job — semantic memory is powerful and overused.
+
+## The Iteration Loop
+
+Ship → observe real traces → find the failure cluster → fix (usually a tool interface or a prompt, occasionally the model) → re-run the eval to confirm no regression → repeat. The traces tell you *what* to fix; the eval tells you whether you *actually* fixed it without breaking something else. Most agent quality comes from this loop, not from the initial build.
 ` };

@@ -220,4 +220,43 @@ print(result.data.key_points)     # ["positive product experience", "slow shippi
 | Need every integration possible | LangChain |
 | Type-safe production Python | PydanticAI |
 | Build from scratch (learning) | Raw API + tool calling |
+`,
+
+engineer: `
+# AI Development Frameworks
+
+The default rundown covers what each framework does. The engineering question is different: **should you use one at all, and what do you give up when you do?**
+
+## The Honest Framework Tradeoff
+
+Frameworks give you tool-calling loops, memory, retries, and integrations out of the box. They cost you:
+
+- **Abstraction opacity** — when an agent misbehaves, you're now debugging *your* logic plus the framework's control flow plus the LLM. The framework's convenient loop is a black box at exactly the moment you need to see inside it.
+- **Version churn** — this ecosystem moves fast and breaks APIs; a framework upgrade can be a migration.
+- **Lock-in to their abstractions** — their idea of "agent," "chain," "memory" may not match yours.
+
+**Rule of thumb:** for a simple single agent with a few tools, raw API + your own loop is often *less* code and far more debuggable than pulling in a framework. Frameworks earn their weight when you need their harder parts — stateful multi-step graphs, checkpointing, multi-agent orchestration — not for a tool-calling loop you can write in 40 lines.
+
+## What Actually Differentiates Them
+
+| Framework | Real differentiator | Use when |
+|---|---|---|
+| **LangGraph** | Explicit graph with cycles + **checkpointing / durable state** | Complex stateful flows you need to pause, resume, or human-gate |
+| **CrewAI** | Role-based multi-agent ergonomics | Teams of specialized agents, fast to stand up |
+| **AutoGen** | Agent-to-agent conversation + code execution | Research-y, code-generating multi-agent |
+| **OpenAI Agents SDK** | Clean handoffs, guardrails, tracing; provider-agnostic | Straightforward agents you want observable |
+| **PydanticAI** | Type-safe structured outputs, DI, validation | Production Python services where types matter |
+| **LangChain** | Breadth of integrations | You need an obscure connector and don't want to write it |
+
+## Evaluate a Framework on These, Not the README
+
+1. **Observability** — can you get a full trace of every model call and tool invocation? If not, it's undebuggable at scale.
+2. **Escape hatches** — can you drop to raw model calls when the abstraction fights you? Frameworks that don't let you out are traps.
+3. **State/checkpointing** — for long or resumable workflows, is durable state first-class or bolted on?
+4. **Streaming + async** — production UX and throughput need both; retrofitting is painful.
+5. **Provider portability** — are you locked to one model vendor, or can you switch?
+
+## The Meta-Point
+
+The framework is not the hard part of an agentic system — **evaluation, tool design, context management, and observability are.** A framework that gives you those is worth adopting; one that just wraps a tool loop in nice syntax is worth skipping. Choose based on the hard parts it solves, not the demo it enables.
 ` };

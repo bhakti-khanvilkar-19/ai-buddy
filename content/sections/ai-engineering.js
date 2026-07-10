@@ -277,4 +277,56 @@ Traditional security review checklists miss AI-specific attack surfaces. Make su
 ## The One-Paragraph Takeaway
 
 AI engineering is the unglamorous 90% of the work that turns an impressive demo into a system you can trust in production — evaluation replaces "looks good to me," observability replaces "we'll find out from support tickets," and cost/security review replace surprises. Make these four things launch-blocking requirements, and your AI initiatives will stop losing credibility after the first incident.
+`,
+
+engineer: `
+# AI Engineering
+
+This is the discipline that separates "we have a cool demo" from "we run this in production." Everything here is the work that doesn't show up in the demo but decides whether the system survives contact with real traffic.
+
+## Evals Are Your Test Suite — Build Them First
+
+Non-deterministic systems can't be regression-tested with \`assertEqual\`. You need a purpose-built eval harness:
+
+| Eval type | Mechanism | Best for |
+|---|---|---|
+| Exact / rule-based | string/JSON match, regex | classification, extraction, format |
+| Code execution | run the generated code, check it works | codegen |
+| LLM-as-judge | scoring model with a rubric | open-ended quality |
+| Human | expert rating | the ground-truth calibration for the above |
+
+**LLM-as-judge caveats you must know:** judges are biased toward longer answers, toward their own family's style, and toward position (first option). Calibrate the judge against human ratings before trusting it, and pin the judge model/version — an unpinned judge means your "quality metric" silently drifts.
+
+CI gate: **evals run on every prompt/model change, and a regression blocks the merge.** Without this, quality erodes one well-intentioned tweak at a time.
+
+## Observability: the Non-Negotiable
+
+Per call, capture: input, output, model+version, token counts, cost, latency (TTFT and total), tool calls, stop reason, and a trace/session id. Tools: Langfuse, Braintrust, Helicone, Arize Phoenix, W&B Weave. The test: *"can I reconstruct exactly what happened for user X at time T?"* If not, you're flying blind and will learn about problems from support tickets.
+
+## Cost Engineering — the Levers, Ranked
+
+| Lever | Typical saving | Cost |
+|---|---|---|
+| Right-size the model (cascade cheap→expensive) | 80–90% | routing logic + eval to prove quality holds |
+| Prompt caching (stable prefix) | ~90% on cached tokens | prompt restructuring |
+| Batch API for non-realtime | ~50% | async latency |
+| Semantic cache (dedup repeat queries) | varies, high on repetitive traffic | cache infra + staleness handling |
+| Shorten outputs (max_tokens, terse instructions) | 10–30% | prompt tuning |
+
+Track **cost per successful task**, not per token — the metric that includes retries and failures.
+
+## Latency Is a Product Feature
+
+TTFT (time to first token) is what users feel — stream always. Levers: smaller model, shorter output, parallel tool calls, speculative decoding, prompt caching (faster prefill on cache hit). A p95 latency SLO belongs in your monitoring next to error rate.
+
+## Security & Guardrails, Concretely
+
+- **Prompt injection** via user input and retrieved content — the OWASP-LLM #1. Separate data from instructions; validate output before any action fires.
+- **Data exfiltration** — least-privilege tools; an agent shouldn't reach data the task doesn't need.
+- **PII** — anonymize/tokenize before the call if the provider shouldn't see it.
+- **I/O guardrails** — validate inputs (injection, jailbreak patterns) and outputs (PII leakage, policy) as explicit layers, not vibes.
+
+## The Maturity Ladder
+
+Demo → logging → evals → CI-gated evals → cost/latency SLOs → guardrails → automated regression + canary on model upgrades. Most teams stall at "logging" and wonder why quality is unpredictable. The rungs above logging are where reliability actually comes from.
 ` };
