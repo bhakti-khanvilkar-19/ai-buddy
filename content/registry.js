@@ -89,7 +89,11 @@ const SECTIONS = [
     id: 'workflows',
     title: '14. Workflows & Automations',
     personas: ['cadet','commander','engineer'],
-    items: ['Scripts vs Workflows','Triggers','Conditions','Actions','State Management','Error Handling','Tools Comparison']
+    items: ['Scripts vs Workflows','Triggers','Conditions','Actions','State Management','Error Handling','Tools Comparison'],
+    itemsByPersona: {
+      commander: ['The 2026 Automation Shift','Agentic Workflows vs RPA','The Governance Battleground','Automation Review Questions'],
+      engineer:  ['Workflow vs Agent vs Agentic','Agentic Automation + RPA','Scheduled & Long-Running','State & Error Handling','Tooling Landscape 2026']
+    }
   },
   {
     id: 'frameworks',
