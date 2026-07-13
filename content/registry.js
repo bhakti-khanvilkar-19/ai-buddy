@@ -271,5 +271,16 @@ const SECTIONS = [
       engineer:  ['Chat UI vs API vs Claude Code','Model & Reasoning-Effort Selection','Working Efficiently: Modes & Context Budgeting','Compact, Clear, Fork & Cost Commands','Anatomy of a Production Prompt','When to Turn a Prompt into a Skill','Advanced Template Prompts'],
       embedded:  ['Grounding Beats Tool Choice','Chat UI vs Local/Air-Gapped','Model & Reasoning Effort for Firmware','Working Efficiently & Commands','Hardware Template Prompts']
     }
+  },
+  {
+    id: 'loop-engineering',
+    title: '44. Loop & Harness Engineering',
+    personas: ['earthling','cadet','commander','engineer'],
+    items: ['Prompt → Context → Loop','The Agent Loop','Termination Logic','Self-Verification','The Harness','Long-Running Agents'],
+    itemsByPersona: {
+      earthling: ['What Is a Loop','Agents That Run Themselves','Why It Matters'],
+      commander: ['The 2026 Shift','Cost of Long-Running Agents','Governance & Audit'],
+      engineer:  ['Prompt → Context → Loop → Harness','Anatomy of the Loop','Termination Logic','Grounded Self-Verification','The Five Harness Layers','Harness Defects','Heterogeneous Model Routing']
+    }
   }
 ];
