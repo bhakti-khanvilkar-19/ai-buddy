@@ -149,4 +149,119 @@ flowchart TD
 \`\`\`
 
 This hybrid pattern is extremely powerful — deterministic flow for reliability, LLM for the parts that require judgment.
-` };
+`,
+
+commander: `
+# Workflows & Automations
+
+## The 2026 Automation Shift
+
+Enterprise automation reached an inflection point in 2026: the question is no longer "RPA or AI?" but "how do agentic workflows and RPA work *together*?" This is where a lot of the near-term, measurable ROI of AI actually lands — not in chatbots, but in automating multi-step business processes end to end.
+
+## Agentic Workflows vs Classic RPA — and Why It's "And," Not "Or"
+
+| | Classic RPA | Agentic workflow |
+|---|---|---|
+| Handles | Structured, rule-based, repetitive steps | Steps needing judgment, language understanding, adaptation |
+| Breaks when | The form/screen changes | (more robust — reasons about intent) |
+| Auditability | Deterministic, fully logged | Needs explicit tracing to match |
+| Cost model | Per-bot, predictable | Per-task, scales with reasoning |
+
+The winning enterprise pattern is **hybrid**: deterministic RPA bots for the high-volume structured steps, reasoning agents for the judgment steps, with the agent orchestrating. If your org already invested in RPA, agentic AI *extends* that investment rather than replacing it — a point worth making to stakeholders anxious about stranded RPA spend.
+
+## What the Numbers Say
+
+Industry surveys put enterprise agentic-workflow adoption on a steep 2026 curve (Gartner projecting ~40% of enterprises deploying task-specific agents this year), with early adopters reporting ROI in the 1.7×–10× range per dollar. Treat those ceiling figures skeptically, but the direction is real and your competitors are moving.
+
+## The Governance Battleground
+
+The decisive issue in enterprise automation right now isn't capability — it's **governance**. Regulatory acceleration (e.g. the EU AI Office's direction on high-risk agentic systems) increasingly requires **deterministic audit logs** of what an automated agent did and why. Practical requirements for anything you approve:
+
+- **Every automated decision logged** for audit and accountability — non-negotiable in regulated processes.
+- **Human-in-the-loop gates** on consequential/irreversible actions.
+- **Cross-functional ownership** — agentic automation in a regulated process needs engineering + compliance + the process owner, not an engineering-only sign-off.
+
+## Questions to Ask in an Automation Proposal Review
+
+1. Which steps are deterministic (→ RPA) vs judgment (→ agent)? Don't pay for reasoning where a rule suffices.
+2. What's logged, and does it satisfy our audit obligations for this process's risk tier?
+3. Where are the human gates on irreversible actions?
+4. What's the failure mode when the agent is wrong, and who's accountable?
+5. What's the cost per completed process run, including failures and retries?
+
+## The One-Paragraph Takeaway
+
+The real near-term ROI of AI in the enterprise is agentic automation of multi-step processes — deployed *alongside* your existing RPA, not instead of it. The capability is proven; the gating factor is governance. Approve automation initiatives on their step-level design (rules vs reasoning), their audit trail, and their human gates — the same discipline you'd apply to any system that takes real action in a regulated business process.
+`,
+
+engineer: `
+# Workflows & Automations
+
+## Workflow, Agent, or Agentic Workflow — Pick Deliberately
+
+The 2026 vocabulary matters because it maps to reliability and cost:
+
+| Pattern | Control flow | Use when | Reliability |
+|---|---|---|---|
+| **Script** | Hard-coded | Fully deterministic, never changes | Highest |
+| **Workflow** | Declarative, fixed nodes | Known steps, need retries/observability | High |
+| **LLM-routed workflow** | Fixed nodes, LLM picks branches | Known steps, data-dependent routing | High |
+| **Agentic workflow** | LLM decides steps within bounds | Path depends on runtime discovery | Medium |
+| **Open agent** | Fully LLM-driven | Genuinely unpredictable tasks | Lowest |
+
+**The engineering discipline is choosing the least dynamic pattern that solves the problem.** Most "agent" projects should be LLM-routed workflows — you get the adaptability where you need it (branch decisions) and determinism everywhere else. Reserve open agency for tasks whose steps genuinely can't be predetermined.
+
+## Agentic Automation vs RPA — the Integration Pattern
+
+The production reality isn't agents replacing RPA; it's agents **orchestrating** RPA:
+
+\`\`\`mermaid
+flowchart TD
+    T([Trigger: email / event / schedule]) --> AG[Agent: understand intent, plan]
+    AG --> D{Step type?}
+    D -->|structured, high-volume| RPA[Deterministic RPA bot]
+    D -->|judgment / language| LLM[LLM reasoning step]
+    RPA --> AG
+    LLM --> AG
+    AG --> V[Validate + log every decision]
+    V --> DONE([Complete / escalate])
+\`\`\`
+
+The agent handles intent, planning, and the judgment steps; deterministic bots handle the structured high-volume steps (they're cheaper, faster, and audit-clean). This hybrid is more reliable *and* cheaper than making the LLM do everything.
+
+## Scheduled & Long-Running Automation
+
+2026's automation isn't just triggered — it's **scheduled and autonomous**. Cron-driven agents that wake on an interval, do work, and report (Claude Code's cron + \`/loop\` are the accessible primitives). Engineering requirements specific to unattended/scheduled automation:
+
+- **Idempotency** — a scheduled run that overlaps or retries must not double-act.
+- **Wall-clock timeout + budget cap** — nobody's watching; an unbounded scheduled loop is an unbounded invoice.
+- **State across runs** — durable, validated state (not in-memory) since runs are separate processes.
+- **Alerting on failure** — a silent failed 3am run is worse than a loud one; page or ticket on anomaly.
+- **Dead-letter handling** — failed items go somewhere inspectable, not into the void.
+
+## State Management & Error Handling — the Unglamorous Core
+
+Most workflow failures aren't AI failures; they're state/error-handling failures:
+
+- **Durable state** with checkpoint + resume, so a failure at step 8 of 10 doesn't restart from zero.
+- **Retry with backoff** on transient failures; **circuit-break** on persistent ones.
+- **Compensating actions** for partial completion (the workflow equivalent of a rollback) — if step 8 fails after step 7 sent an email, what undoes it?
+- **Every decision logged** — for agentic steps this doubles as your audit trail.
+
+## Tooling Landscape (2026)
+
+| Tool | Fit |
+|---|---|
+| **n8n / Zapier / Make** | Low-code, broad integrations, now with agentic nodes |
+| **Temporal** | Durable execution — the gold standard for long-running stateful workflows |
+| **LangGraph** | Stateful agentic graphs with checkpointing |
+| **Prefect / Airflow** | Data-pipeline orchestration |
+| **Automation Anywhere / UiPath** | Enterprise RPA now shipping "agentic" layers on top |
+
+For anything long-running and stateful, durable-execution engines (Temporal-class) matter more than the LLM framework — the hard part is surviving crashes and resuming correctly, not the model call.
+
+## The One-Sentence Takeaway
+
+The 2026 automation stack is agents *orchestrating* deterministic workflows and RPA — choose the least-dynamic pattern per step, make scheduled/long-running automation idempotent and bounded, and invest in durable state + error handling, because that's where automation actually breaks, not in the model.
+`
+};
